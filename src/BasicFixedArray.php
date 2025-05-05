@@ -1,0 +1,117 @@
+<?php
+namespace Neuralpin\DataStructure;
+
+use Countable;
+use Exception;
+use ArrayAccess;
+use OutOfRangeException;
+
+class BasicFixedArray implements ArrayAccess, Countable
+{
+    protected ?array $data = [];
+
+    protected int $count = 0;
+
+    public function __construct(protected int $size)
+    {}
+
+    public function count(): int
+    {
+        return $this->count;
+    }
+
+    public function capacity(): int
+    {
+        return $this->size;
+    }
+
+    public function push(mixed $element): void
+    {
+        if($this->count === $this->size){
+            throw new OutOfRangeException('Out of range');
+        }
+
+        $this->data[] = $element;
+        $this->count++;
+    }
+
+    public function pop(): mixed
+    {
+        $keys = array_keys($this->data);
+        $lastKey = end($keys);
+        if(isset($this->data[$lastKey])){
+            $element = $this->data[$lastKey];
+            unset($this->data[$lastKey]);
+            $this->count--;
+
+            return $element;
+        }
+        return null;
+    }
+
+    public function clear() {
+        $this->data = [];
+        $this->count = 0;
+    }
+
+    public function offsetExists(mixed $offset): bool
+    {
+        return isset($this->data[$offset]);
+    }
+
+    public function offsetGet(mixed $offset): mixed
+    {
+        return $this->data[$offset];
+    }
+
+    public function offsetSet(mixed $offset, mixed $value): void 
+    {
+        if (!isset($this->data[$offset]) && $this->count === $this->size) {
+            throw new OutOfRangeException('Out of range');
+        }
+
+        $this->data[$offset] = $value;
+        $this->count++;
+    }
+
+    public function offsetUnset(mixed $offset): void 
+    {
+        if (isset($this->data[$offset])) {
+            unset($this->data[$offset]);
+            $this->count--;
+        }
+    }
+
+    public function __debugInfo(): array
+    {
+        return $this->data;
+    }
+}
+
+$MyTest = new BasicFixedArray(2);
+$MyTest->push('Mercurio');
+$MyTest->push('Venus');
+try {
+    $MyTest->push(3);
+} catch (Exception $error) {
+    var_dump($error->getMessage());
+}
+var_dump($MyTest);
+
+echo count($MyTest);
+echo $MyTest->capacity();
+
+
+$MyTest = new BasicFixedArray(3);
+
+$MyTest[1] = 'Lorem';
+$MyTest['ipsum'] = 123456;
+unset($MyTest[1]);
+$MyTest['algo'] = 'algo';
+$MyTest['lo que sea'] = 'lo que sea';
+var_dump($MyTest);
+echo count($MyTest);
+
+// pop clear isset
+
+echo $MyTest[0];

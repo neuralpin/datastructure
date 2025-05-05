@@ -1,0 +1,37 @@
+{
+    "name": "neuralpin/datastructures",
+    "type": "library",
+    "description": "PHP data structures",
+    "keywords": [
+        "datastructure"
+    ],
+    "license": "GPL-3.0-only",
+    "authors": [
+        {
+            "name": "Ulises Rendón",
+            "email": "fdulises@outlook.com",
+            "homepage": "https://neuralpin.com",
+            "role": "Developer"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Neuralpin\\DataStructure\\": "src/"
+        }
+    },
+    "require-dev": {
+        "symfony/var-dumper": "^7.1",
+        "phpunit/phpunit": "^11.4",
+        "laravel/pint": "^1.18",
+        "phpstan/phpstan": "^2.1"
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit --bootstrap vendor/autoload.php tests",
+        "analyze": "vendor/bin/phpstan analyze src",
+        "fixstyle": "./vendor/bin/pint",
+        "server": [
+            "Composer\\Config::disableProcessTimeout",
+            "@php -S localhost:8000 demo/index.php"
+        ]
+    }
+}
