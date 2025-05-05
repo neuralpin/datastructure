@@ -1,9 +1,10 @@
 <?php
+
 namespace Neuralpin\DataStructure;
 
+use ArrayAccess;
 use Countable;
 use Exception;
-use ArrayAccess;
 use OutOfRangeException;
 
 class BasicFixedArray implements ArrayAccess, Countable
@@ -12,8 +13,7 @@ class BasicFixedArray implements ArrayAccess, Countable
 
     protected int $count = 0;
 
-    public function __construct(protected int $size)
-    {}
+    public function __construct(protected int $size) {}
 
     public function count(): int
     {
@@ -27,7 +27,7 @@ class BasicFixedArray implements ArrayAccess, Countable
 
     public function push(mixed $element): void
     {
-        if($this->count === $this->size){
+        if ($this->count === $this->size) {
             throw new OutOfRangeException('Out of range');
         }
 
@@ -39,17 +39,19 @@ class BasicFixedArray implements ArrayAccess, Countable
     {
         $keys = array_keys($this->data);
         $lastKey = end($keys);
-        if(isset($this->data[$lastKey])){
+        if (isset($this->data[$lastKey])) {
             $element = $this->data[$lastKey];
             unset($this->data[$lastKey]);
             $this->count--;
 
             return $element;
         }
+
         return null;
     }
 
-    public function clear() {
+    public function clear()
+    {
         $this->data = [];
         $this->count = 0;
     }
@@ -64,9 +66,9 @@ class BasicFixedArray implements ArrayAccess, Countable
         return $this->data[$offset];
     }
 
-    public function offsetSet(mixed $offset, mixed $value): void 
+    public function offsetSet(mixed $offset, mixed $value): void
     {
-        if (!isset($this->data[$offset]) && $this->count === $this->size) {
+        if (! isset($this->data[$offset]) && $this->count === $this->size) {
             throw new OutOfRangeException('Out of range');
         }
 
@@ -74,7 +76,7 @@ class BasicFixedArray implements ArrayAccess, Countable
         $this->count++;
     }
 
-    public function offsetUnset(mixed $offset): void 
+    public function offsetUnset(mixed $offset): void
     {
         if (isset($this->data[$offset])) {
             unset($this->data[$offset]);
@@ -100,7 +102,6 @@ var_dump($MyTest);
 
 echo count($MyTest);
 echo $MyTest->capacity();
-
 
 $MyTest = new BasicFixedArray(3);
 
