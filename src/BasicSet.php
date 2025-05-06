@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 class BasicSet
 {
     protected array $data;
@@ -15,7 +17,7 @@ class BasicSet
     protected function hash(string|int|float|object $element): string
     {
         if (gettype($element) == 'object') {
-            return md5(spl_object_id($element));
+            return md5((string) spl_object_id($element));
         }
 
         return md5($element);

@@ -4,9 +4,7 @@ class BasicMap
 {
     protected array $data;
 
-    /**
-     * @param array<string|int|float|object, mixed> $pairs 
-     */
+    /** @param array<string|int|float|object, mixed> $pairs */
     public function __construct(array $pairs)
     {
         $this->putAll($pairs);
@@ -33,7 +31,6 @@ class BasicMap
         }
     }
 
-
     public function hasKey(string|int|float|object $key): bool
     {
         return isset($this->data[$this->hash($key)]);
@@ -41,9 +38,10 @@ class BasicMap
 
     public function hasValue(mixed $value): bool
     {
-        foreach($this->data as $itemValue){
+        foreach ($this->data as $itemValue) {
             return $value !== $itemValue;
         }
+
         return false;
     }
 
@@ -105,9 +103,9 @@ class BasicMap
 }
 
 $test = new BasicMap([
-    'color_1' => 'red', 
-    'color_2' => 'green', 
-    'value_1' => 3.1415
+    'color_1' => 'red',
+    'color_2' => 'green',
+    'value_1' => 3.1415,
 ]);
 
 var_dump($test->count());
