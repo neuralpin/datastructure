@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Neuralpin\DataStructure;
 
+use Generator;
 use Neuralpin\DataStructure\LinkedListNode;
 
 require __DIR__.'/LinkedListNode.php';
@@ -50,32 +51,47 @@ class BasicLinkedList
         $this->bottom = null;
     }
 
-    public function __debugInfo(): array
+    public function isEmpty(): bool
+    {
+        return is_null($this->top);
+    }
+
+    public function top(): LinkedListNode|null
+    {
+        return $this->top;
+    }
+
+    public function toArray(): array
     {
         $data = [];
-        $current = $this->top;
-        while($current){
+        $current = $this->top();
+        while ($current) {
             $data[] = $current->value;
             $current = $current?->next;
         }
 
         return $data;
     }
+
+    public function __debugInfo(): array
+    {
+        return $this->toArray();
+    }
+
 }
 
 $MyList = new BasicLinkedList;
-var_dump($MyList->push('Index'));
-var_dump($MyList->push('Computer science'));
+$MyList->push('Index');
+$MyList->push('Computer science');
 $MyList->push('Algorithms');
 $MyList->push('Data Structures');
 
 var_dump($MyList);
 
 
-var_dump($MyList->pop());
-var_dump($MyList->pop());
-var_dump($MyList);
-
+// var_dump($MyList->pop());
+// var_dump($MyList->pop());
+// var_dump($MyList);
 
 // $BreadcrumbList = [
 //     (object) [
