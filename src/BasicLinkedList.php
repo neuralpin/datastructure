@@ -77,41 +77,43 @@ var_dump($MyList->pop());
 var_dump($MyList);
 
 
-$BreadcrumbList = [
-    (object) [
-        'id' => 123,
-        'title' => 'Index',
-        'parent' => 0,
-    ],
-    (object) [
-        'id' => 124,
-        'title' => 'Computer science',
-        'parent' => 123,
-    ],
-    (object) [
-        'id' => 234,
-        'title' => 'Algorithms',
-        'parent' => 124,
-    ],
-    (object) [
-        'id' => 456,
-        'title' => 'Data Structures',
-        'parent' => 234,
-    ],
-];
+// $BreadcrumbList = [
+//     (object) [
+//         'id' => 456,
+//         'title' => 'Data Structures',
+//         'parent' => 234,
+//     ],
+//     (object) [
+//         'id' => 124,
+//         'title' => 'Computer science',
+//         'parent' => 123,
+//     ],
+//     (object) [
+//         'id' => 234,
+//         'title' => 'Algorithms',
+//         'parent' => 124,
+//     ],
+//     (object) [
+//         'id' => 123,
+//         'title' => 'Index',
+//         'parent' => 0,
+//     ],
+// ];
 
-$BreadcrumbMap = [];
-$List = null;
-foreach($BreadcrumbList as $Item){
-    $BreadcrumbMap[$Item->id] = new LinkedListNode($Item);
+// $BreadcrumbMap = [];
+// $List = null;
+// foreach($BreadcrumbList as $Item){
+//     $BreadcrumbMap[$Item->id] = new LinkedListNode($Item);
 
-    if(isset($BreadcrumbMap[$Item->parent])){
-        $BreadcrumbMap[$Item->parent]->next = $BreadcrumbMap[$Item->id];
-    }
+//     if($Item->parent === 0){
+//         $List = $BreadcrumbMap[$Item->id];
+//     }
+// }
 
-    if($Item->parent === 0){
-        $List = $BreadcrumbMap[$Item->id];
-    }
-}
+// foreach ($BreadcrumbMap as $Item) {
+//     if (isset($BreadcrumbMap[$Item->value->parent])) {
+//         $BreadcrumbMap[$Item->value->parent]->next = $BreadcrumbMap[$Item->value->id];
+//     }
+// }
 
-var_dump($List);
+// var_dump($List);
