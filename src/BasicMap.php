@@ -1,10 +1,12 @@
 <?php
 
-class BasicSet
+class BasicMap
 {
     protected array $data;
 
-    /** @param array<string|int|float|object, mixed> $pairs */
+    /**
+     * @param array<string|int|float|object, mixed> $pairs 
+     */
     public function __construct(array $pairs)
     {
         $this->putAll($pairs);
@@ -102,20 +104,21 @@ class BasicSet
     }
 }
 
-$test = new BasicSet(['red', 'green', 3.1415]);
+$test = new BasicMap([
+    'color_1' => 'red', 
+    'color_2' => 'green', 
+    'value_1' => 3.1415
+]);
 
 var_dump($test->count());
-var_dump($test->hasKey('green'));
+var_dump($test->hasKey('color_2'));
+var_dump($test->hasKey('lorem_1'));
 var_dump($test->hasValue('green'));
 var_dump($test->hasValue('purple'));
-var_dump($test->get(0));
-var_dump($test->get(2));
-var_dump($test->get(3));
-var_dump($test->get(4));
+var_dump($test->get('color_1'));
+var_dump($test->get('value_1'));
+var_dump($test->get('lorem_1'));
 
 var_dump($test->toArray());
 
 var_dump($test->map(fn ($item) => gettype($item)));
-
-var_dump($test->last());
-var_dump($test->first());
