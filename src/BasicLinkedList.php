@@ -78,6 +78,17 @@ class BasicLinkedList
         return $this->toArray();
     }
 
+    function generator(): Generator
+    {
+        $current = $this->top();
+        $key = 0;
+        while ($current) {
+            yield $key => $current->value;
+            $current = $current?->next;
+            $key++;
+        }
+    }
+
 }
 
 $MyList = new BasicLinkedList;
@@ -86,7 +97,11 @@ $MyList->push('Computer science');
 $MyList->push('Algorithms');
 $MyList->push('Data Structures');
 
-var_dump($MyList);
+// var_dump($MyList);
+
+foreach ($MyList->generator() as $k => $v) {
+    var_dump("{$k} => {$v}");
+}
 
 
 // var_dump($MyList->pop());
