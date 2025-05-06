@@ -120,3 +120,5 @@ var_dump($test->get('lorem_1'));
 var_dump($test->toArray());
 
 var_dump($test->map(fn ($item) => gettype($item)));
+
+// [todo] nested map style $a[$b][$c];

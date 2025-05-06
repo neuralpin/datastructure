@@ -10,8 +10,6 @@ require __DIR__.'/LinkedListNode.php';
 
 class BasicLinkedList
 {
-    protected array $data = [];
-
     protected ?LinkedListNode $top = null;
 
     protected ?LinkedListNode $bottom = null;
@@ -46,6 +44,12 @@ class BasicLinkedList
         return $node?->value;
     }
 
+    public function clear(): void
+    {
+        $this->top = null;
+        $this->bottom = null;
+    }
+
     public function __debugInfo(): array
     {
         $data = [];
@@ -60,8 +64,8 @@ class BasicLinkedList
 }
 
 $MyList = new BasicLinkedList;
-$MyList->push('Index');
-$MyList->push('Computer science');
+var_dump($MyList->push('Index'));
+var_dump($MyList->push('Computer science'));
 $MyList->push('Algorithms');
 $MyList->push('Data Structures');
 
@@ -71,3 +75,43 @@ var_dump($MyList);
 var_dump($MyList->pop());
 var_dump($MyList->pop());
 var_dump($MyList);
+
+
+$BreadcrumbList = [
+    (object) [
+        'id' => 123,
+        'title' => 'Index',
+        'parent' => 0,
+    ],
+    (object) [
+        'id' => 124,
+        'title' => 'Computer science',
+        'parent' => 123,
+    ],
+    (object) [
+        'id' => 234,
+        'title' => 'Algorithms',
+        'parent' => 124,
+    ],
+    (object) [
+        'id' => 456,
+        'title' => 'Data Structures',
+        'parent' => 234,
+    ],
+];
+
+$BreadcrumbMap = [];
+$List = null;
+foreach($BreadcrumbList as $Item){
+    $BreadcrumbMap[$Item->id] = new LinkedListNode($Item);
+
+    if(isset($BreadcrumbMap[$Item->parent])){
+        $BreadcrumbMap[$Item->parent]->next = $BreadcrumbMap[$Item->id];
+    }
+
+    if($Item->parent === 0){
+        $List = $BreadcrumbMap[$Item->id];
+    }
+}
+
+var_dump($List);
