@@ -45,6 +45,19 @@ class BasicLinkedList
         return $node?->value;
     }
 
+    // public function shift(): mixed
+    // {
+    //     $node = $this->bottom;
+
+    //     $this->bottom = $this->bottom?->next;
+
+    //     if ($this->bottom === $node) {
+    //         $this->bottom = null;
+    //     }
+
+    //     return $node?->value;
+    // }
+
     public function clear(): void
     {
         $this->top = null;
@@ -59,6 +72,28 @@ class BasicLinkedList
     public function top(): LinkedListNode|null
     {
         return $this->top;
+    }
+
+    public function bottom(): LinkedListNode|null
+    {
+        return $this->bottom;
+    }
+
+    public function unshift(mixed $Item): LinkedListNode
+    {
+        $newNode = new LinkedListNode($Item);
+
+        if (!isset($this->bottom)) {
+            $this->bottom = $newNode;
+        }
+
+        if (isset($this->top)) {
+            $newNode->next = $this->top;
+        }
+
+        $this->top = $newNode;
+
+        return $newNode;
     }
 
     public function toArray(): array
@@ -92,10 +127,11 @@ class BasicLinkedList
 }
 
 $MyList = new BasicLinkedList;
-$MyList->push('Index');
 $MyList->push('Computer science');
 $MyList->push('Algorithms');
 $MyList->push('Data Structures');
+
+$MyList->unshift('Index');
 
 // var_dump($MyList);
 
