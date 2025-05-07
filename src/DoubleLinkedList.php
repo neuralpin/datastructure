@@ -166,6 +166,26 @@ class DoubleLinkedList
 
         return $newNode;
     }
+
+    public function remove(DoubleLinkedListNode $node)
+    {
+        if (isset($node->next) && isset($node->prev)) {
+            $node->prev->next = $node->next;
+            $node->next->prev = $node->prev;
+        } else if (isset($node->next) && !isset($node->prev)) {
+            $node->next->prev = null;
+            $this->top = $node->next;
+        } else if (!isset($node->next) && isset($node->prev)) {
+            $node->prev->next = null;
+            $this->bottom = $node->prev;
+        } else {
+            $this->top = null;
+            $this->bottom = null;
+        }
+
+        $node->next = null;
+        $node->prev = null;
+    }
 }
 
 // $MyList = new DoubleLinkedList;
@@ -222,21 +242,44 @@ class DoubleLinkedList
 // var_dump($ShitTest);
 
 
-$ReverseTest = new DoubleLinkedList;
-$ReverseTest->push(1);
-$ReverseTest->push(2);
-$ReverseTest->push(3);
-$ReverseTest->push(4);
-$ReverseTest->push(5);
-$ReverseTest->unshift(0);
-foreach($ReverseTest->generator() as $value){
-    var_dump($value);
-}
-foreach($ReverseTest->reverseGenerator() as $value){
-    var_dump($value);
-}
+// $ReverseTest = new DoubleLinkedList;
+// $ReverseTest->push(1);
+// $ReverseTest->push(2);
+// $ReverseTest->push(3);
+// $ReverseTest->push(4);
+// $ReverseTest->push(5);
+// $ReverseTest->unshift(0);
+// foreach($ReverseTest->generator() as $value){
+//     var_dump($value);
+// }
+// foreach($ReverseTest->reverseGenerator() as $value){
+//     var_dump($value);
+// }
 
 
+// $RemovingTest = new DoubleLinkedList;
+// $nodeFirst = $RemovingTest->push(1);
+// $nodeSecond = $RemovingTest->push(2);
+// $nodeThird = $RemovingTest->push(3);
+
+// $nodeSecond->remove();
+// foreach ($RemovingTest->generator() as $value) {
+//     var_dump($value);
+// }
+// // var_dump($nodeSecond);
+
+// $nodeFirst->remove();
+// var_dump($RemovingTest);
+
+// $nodeThird->remove();
+// var_dump($RemovingTest);
+
+
+$RemovingFromBotomTest = new DoubleLinkedList;
+$nodeFirst = $RemovingFromBotomTest->push(1);
+$nodeSecond = $RemovingFromBotomTest->push(2);
+$nodeSecond->remove();
+var_dump($RemovingFromBotomTest);
 
 
 // var_dump($MyList->pop());

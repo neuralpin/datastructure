@@ -16,12 +16,10 @@ class LinkedListNode
         set(?self $next) => $next;
     }
 
-    public ?LinkedList $List = null {
-        get => $this->List;
-        set(?LinkedList $List) => $List;
-    }
-
-    public function __construct(mixed $value, ?LinkedList $List = null)
+    public function __construct(
+        mixed $value, 
+        protected LinkedList $List,
+    )
     {
         $this->value = $value;
         $this->List = $List;

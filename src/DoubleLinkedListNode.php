@@ -23,15 +23,19 @@ class DoubleLinkedListNode
         set(?self $next) => $next;
     }
 
-    public ?DoubleLinkedList $List = null {
-        get => $this->List;
-        set(?DoubleLinkedList $List) => $List;
-    }
+    protected ?DoubleLinkedList $List;
 
     public function __construct(
-        mixed $value, ?DoubleLinkedList $List = null
+        mixed $value, 
+        DoubleLinkedList $List,
     ) {
         $this->value = $value;
         $this->List = $List;
+    }
+
+    public function remove()
+    {
+        $this->List->remove($this);
+        $this->List = null;
     }
 }
