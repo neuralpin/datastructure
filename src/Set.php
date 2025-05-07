@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-class BasicSet
+class Set
 {
     protected array $data;
 
@@ -92,7 +92,7 @@ class BasicSet
     }
 }
 
-$test = new BasicSet(['red', 'green', 3.1415]);
+$test = new Set(['red', 'green', 3.1415]);
 $test->add((object) [1, 2, 3]);
 var_dump($test->count());
 var_dump($test->contains('green'));

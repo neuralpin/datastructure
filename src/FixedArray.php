@@ -9,7 +9,7 @@ use Countable;
 use Exception;
 use OutOfRangeException;
 
-class BasicFixedArray implements ArrayAccess, Countable
+class FixedArray implements ArrayAccess, Countable
 {
     protected ?array $data = [];
 
@@ -92,7 +92,7 @@ class BasicFixedArray implements ArrayAccess, Countable
     }
 }
 
-$MyTest = new BasicFixedArray(2);
+$MyTest = new FixedArray(2);
 $MyTest->push('Mercurio');
 $MyTest->push('Venus');
 try {
@@ -105,7 +105,7 @@ var_dump($MyTest);
 echo count($MyTest);
 echo $MyTest->capacity();
 
-$MyTest = new BasicFixedArray(3);
+$MyTest = new FixedArray(3);
 
 $MyTest[1] = 'Lorem';
 $MyTest['ipsum'] = 123456;

@@ -4,11 +4,18 @@ declare(strict_types=1);
 
 namespace Neuralpin\DataStructure;
 
-class LinkedListNode
+use Neuralpin\DataStructure\DoubleLinkedList;
+
+class DoubleLinkedListNode
 {
     public mixed $value = null {
         get => $this->value;
         set(mixed $value) => $value;
+    }
+
+    public ?self $prev = null {
+        get => $this->prev;
+        set(?self $prev) => $prev;
     }
 
     public ?self $next = null {
@@ -16,13 +23,14 @@ class LinkedListNode
         set(?self $next) => $next;
     }
 
-    public ?LinkedList $List = null {
+    public ?DoubleLinkedList $List = null {
         get => $this->List;
-        set(?LinkedList $List) => $List;
+        set(?DoubleLinkedList $List) => $List;
     }
 
-    public function __construct(mixed $value, ?LinkedList $List = null)
-    {
+    public function __construct(
+        mixed $value, ?DoubleLinkedList $List = null
+    ) {
         $this->value = $value;
         $this->List = $List;
     }

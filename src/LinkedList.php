@@ -5,21 +5,23 @@ declare(strict_types=1);
 namespace Neuralpin\DataStructure;
 
 use Generator;
-use Neuralpin\DataStructure\LinkedListNode;
 
 require __DIR__.'/LinkedListNode.php';
 
-class BasicLinkedList
+class LinkedList
 {
     protected ?LinkedListNode $top = null;
 
     protected ?LinkedListNode $bottom = null;
 
+    /**
+     * Add a new element to the bottom of the list
+     */
     public function push(mixed $Item): LinkedListNode
     {
-        $newNode = new LinkedListNode($Item);
+        $newNode = new LinkedListNode($Item, $this);
 
-        if (!isset($this->top)) {
+        if (! isset($this->top)) {
             $this->top = $newNode;
         }
 
@@ -32,19 +34,35 @@ class BasicLinkedList
         return $newNode;
     }
 
+    /**
+     * Return and remove the element at the bottom of the list
+     */
     public function pop(): mixed
     {
-        $node = $this->top;
+        $bottom = $this->bottom();
+        $current = $this->top();
 
-        $this->top = $this->top?->next;
-
-        if($this->bottom === $node){
+        if ($current === $bottom) {
+            $this->top = null;
             $this->bottom = null;
+            return $current?->value;
         }
 
-        return $node?->value;
+        while ($current) {
+            if ($current->next === $bottom) {
+                $current->next = null;
+                $this->bottom = $current;
+                break;
+            }
+            $current = $current?->next;
+        }
+
+        return $bottom?->value;
     }
 
+    /**
+     * Remove all elements from the list
+     */
     public function clear(): void
     {
         $this->top = null;
@@ -56,31 +74,14 @@ class BasicLinkedList
         return is_null($this->top);
     }
 
-    public function top(): LinkedListNode|null
+    public function top(): ?LinkedListNode
     {
         return $this->top;
     }
 
-    public function bottom(): LinkedListNode|null
+    public function bottom(): ?LinkedListNode
     {
         return $this->bottom;
-    }
-
-    public function unshift(mixed $Item): LinkedListNode
-    {
-        $newNode = new LinkedListNode($Item);
-
-        if (!isset($this->bottom)) {
-            $this->bottom = $newNode;
-        }
-
-        if (isset($this->top)) {
-            $newNode->next = $this->top;
-        }
-
-        $this->top = $newNode;
-
-        return $newNode;
     }
 
     public function toArray(): array
@@ -100,7 +101,10 @@ class BasicLinkedList
         return $this->toArray();
     }
 
-    function generator(): Generator
+    /**
+     * Algorithm for list iterating using generators
+     */
+    public function generator(): Generator
     {
         $current = $this->top();
         $key = 0;
@@ -111,25 +115,44 @@ class BasicLinkedList
         }
     }
 
+    /**
+     * Return and remove the top element of the list
+     */
     public function shift(): mixed
     {
-        $bottom = $this->bottom();
-        $current = $this->top();
-        while($current) {
-            if($current->next === $bottom){
-                $current->next = null;
-                $this->bottom = $current;
-                break;
-            }
-            $current = $current?->next;
+        $node = $this->top;
+
+        $this->top = $this->top?->next;
+
+        if ($this->bottom === $node) {
+            $this->bottom = null;
         }
 
-        return $bottom->value;
+        return $node?->value;
     }
 
+    /**
+     * Insert an element at the top of the list
+     */
+    public function unshift(mixed $Item): LinkedListNode
+    {
+        $newNode = new LinkedListNode($Item, $this);
+
+        if (!isset($this->bottom)) {
+            $this->bottom = $newNode;
+        }
+
+        if (isset($this->top)) {
+            $newNode->next = $this->top;
+        }
+
+        $this->top = $newNode;
+
+        return $newNode;
+    }
 }
 
-$MyList = new BasicLinkedList;
+$MyList = new LinkedList;
 $MyList->push('Computer science');
 $MyList->push('Algorithms');
 $MyList->push('Data Structures');
@@ -143,7 +166,6 @@ var_dump($MyList->shift());
 foreach ($MyList->generator() as $k => $v) {
     var_dump("{$k} => {$v}");
 }
-
 
 // var_dump($MyList->pop());
 // var_dump($MyList->pop());

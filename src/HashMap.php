@@ -1,6 +1,6 @@
 <?php
 
-class BasicMap
+class HashMap
 {
     protected array $data;
 
@@ -102,7 +102,7 @@ class BasicMap
     }
 }
 
-$test = new BasicMap([
+$test = new HashMap([
     'color_1' => 'red',
     'color_2' => 'green',
     'value_1' => 3.1415,
