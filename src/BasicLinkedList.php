@@ -45,19 +45,6 @@ class BasicLinkedList
         return $node?->value;
     }
 
-    // public function shift(): mixed
-    // {
-    //     $node = $this->bottom;
-
-    //     $this->bottom = $this->bottom?->next;
-
-    //     if ($this->bottom === $node) {
-    //         $this->bottom = null;
-    //     }
-
-    //     return $node?->value;
-    // }
-
     public function clear(): void
     {
         $this->top = null;
@@ -124,6 +111,22 @@ class BasicLinkedList
         }
     }
 
+    public function shift(): mixed
+    {
+        $bottom = $this->bottom();
+        $current = $this->top();
+        while($current) {
+            if($current->next === $bottom){
+                $current->next = null;
+                $this->bottom = $current;
+                break;
+            }
+            $current = $current?->next;
+        }
+
+        return $bottom->value;
+    }
+
 }
 
 $MyList = new BasicLinkedList;
@@ -134,6 +137,8 @@ $MyList->push('Data Structures');
 $MyList->unshift('Index');
 
 // var_dump($MyList);
+
+var_dump($MyList->shift());
 
 foreach ($MyList->generator() as $k => $v) {
     var_dump("{$k} => {$v}");
