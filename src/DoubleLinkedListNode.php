@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Neuralpin\DataStructure;
 
-use Neuralpin\DataStructure\DoubleLinkedList;
-
 class DoubleLinkedListNode
 {
     public mixed $value = null {
@@ -26,7 +24,7 @@ class DoubleLinkedListNode
     protected ?DoubleLinkedList $List;
 
     public function __construct(
-        mixed $value, 
+        mixed $value,
         DoubleLinkedList $List,
     ) {
         $this->value = $value;

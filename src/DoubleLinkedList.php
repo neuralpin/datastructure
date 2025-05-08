@@ -42,9 +42,10 @@ class DoubleLinkedList
     {
         $bottom = $this->bottom();
 
-        if($bottom === $this->top){
+        if ($bottom === $this->top) {
             $this->top = null;
             $this->bottom = null;
+
             return $bottom?->value;
         }
 
@@ -135,6 +136,7 @@ class DoubleLinkedList
         if ($top === $this->bottom) {
             $this->top = null;
             $this->bottom = null;
+
             return $top?->value;
         }
 
@@ -153,7 +155,7 @@ class DoubleLinkedList
     {
         $newNode = new DoubleLinkedListNode($Item, $this);
 
-        if (!isset($this->bottom)) {
+        if (! isset($this->bottom)) {
             $this->bottom = $newNode;
         }
 
@@ -172,10 +174,10 @@ class DoubleLinkedList
         if (isset($node->next) && isset($node->prev)) {
             $node->prev->next = $node->next;
             $node->next->prev = $node->prev;
-        } else if (isset($node->next) && !isset($node->prev)) {
+        } elseif (isset($node->next) && ! isset($node->prev)) {
             $node->next->prev = null;
             $this->top = $node->next;
-        } else if (!isset($node->next) && isset($node->prev)) {
+        } elseif (! isset($node->next) && isset($node->prev)) {
             $node->prev->next = null;
             $this->bottom = $node->prev;
         } else {
@@ -203,7 +205,6 @@ class DoubleLinkedList
 //     var_dump("{$k} => {$v}");
 // }
 
-
 // $EmptyList = new DoubleLinkedList;
 // var_dump([
 //     'top' => $EmptyList->top(),
@@ -216,7 +217,6 @@ class DoubleLinkedList
 // foreach ($EmptyList->generator() as $k => $v) {
 //     var_dump("{$k} => {$v}");
 // }
-
 
 // $SingleElement = new DoubleLinkedList;
 // $SingleElement->push('lorem');
@@ -241,7 +241,6 @@ class DoubleLinkedList
 // var_dump($ShitTest->shift());
 // var_dump($ShitTest);
 
-
 // $ReverseTest = new DoubleLinkedList;
 // $ReverseTest->push(1);
 // $ReverseTest->push(2);
@@ -255,7 +254,6 @@ class DoubleLinkedList
 // foreach($ReverseTest->reverseGenerator() as $value){
 //     var_dump($value);
 // }
-
 
 // $RemovingTest = new DoubleLinkedList;
 // $nodeFirst = $RemovingTest->push(1);
@@ -274,13 +272,11 @@ class DoubleLinkedList
 // $nodeThird->remove();
 // var_dump($RemovingTest);
 
-
 $RemovingFromBotomTest = new DoubleLinkedList;
 $nodeFirst = $RemovingFromBotomTest->push(1);
 $nodeSecond = $RemovingFromBotomTest->push(2);
 $nodeSecond->remove();
 var_dump($RemovingFromBotomTest);
-
 
 // var_dump($MyList->pop());
 // var_dump($MyList->pop());

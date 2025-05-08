@@ -45,6 +45,7 @@ class LinkedList
         if ($current === $bottom) {
             $this->top = null;
             $this->bottom = null;
+
             return $current?->value;
         }
 
@@ -138,7 +139,7 @@ class LinkedList
     {
         $newNode = new LinkedListNode($Item, $this);
 
-        if (!isset($this->bottom)) {
+        if (! isset($this->bottom)) {
             $this->bottom = $newNode;
         }
 
