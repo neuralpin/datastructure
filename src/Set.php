@@ -2,7 +2,14 @@
 
 declare(strict_types=1);
 
-class Set
+namespace Neuralpin\DataStructure;
+
+use Countable;
+use Generator;
+use JsonSerializable;
+use IteratorAggregate;
+
+class Set implements Countable, IteratorAggregate, JsonSerializable
 {
     protected array $data;
 
@@ -20,7 +27,7 @@ class Set
             return md5((string) spl_object_id($element));
         }
 
-        return md5($element);
+        return md5((string) $element);
     }
 
     public function add(string|int|float|object $element): void
@@ -88,23 +95,47 @@ class Set
 
     public function __debugInfo(): array
     {
-        return array_values($this->data);
+        return $this->toArray();
+    }
+
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
+
+    /**
+     * Algorithm for list iterating using generators
+     */
+    public function getIterator(): Generator
+    {
+        foreach(array_values($this->data) as $k => $v){
+            yield $k => $v;
+        }
     }
 }
 
 $test = new Set(['red', 'green', 3.1415]);
 $test->add((object) [1, 2, 3]);
-var_dump($test->count());
-var_dump($test->contains('green'));
-var_dump($test->contains('purple'));
-var_dump($test->get(0));
-var_dump($test->get(2));
-var_dump($test->get(3));
-var_dump($test->get(4));
+// var_dump($test->count());
+// var_dump($test->contains('green'));
+// var_dump($test->contains('purple'));
+// var_dump($test->get(0));
+// var_dump($test->get(2));
+// var_dump($test->get(3));
+// var_dump($test->get(4));
 
-var_dump($test->toArray());
+// var_dump($test->toArray());
 
-var_dump($test->map(fn ($item) => gettype($item)));
+// var_dump($test->map(fn ($item) => gettype($item)));
 
-var_dump($test->last());
-var_dump($test->first());
+// var_dump($test->last());
+// var_dump($test->first());
+
+// foreach($test as $k => $v){
+//     var_dump([
+//         'k' => $k,
+//         'v' => $v,
+//     ]);
+// }
+
+var_dump(json_encode($test));

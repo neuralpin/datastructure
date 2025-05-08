@@ -1,6 +1,15 @@
 <?php
 
-class HashMap
+declare(strict_types=1);
+
+namespace Neuralpin\DataStructure;
+
+use Countable;
+use Generator;
+use JsonSerializable;
+use IteratorAggregate;
+
+class HashMap implements Countable, IteratorAggregate, JsonSerializable
 {
     protected array $data;
 
@@ -13,10 +22,10 @@ class HashMap
     protected function hash(string|int|float|object $element): string
     {
         if (gettype($element) == 'object') {
-            return md5(spl_object_id($element));
+            return md5((string) spl_object_id($element));
         }
 
-        return md5($element);
+        return md5((string) $element);
     }
 
     public function put(string|int|float|object $key, mixed $value): void
@@ -98,7 +107,22 @@ class HashMap
 
     public function __debugInfo(): array
     {
-        return array_values($this->data);
+        return $this->toArray();
+    }
+
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
+
+    /**
+     * Algorithm for list iterating using generators
+     */
+    public function getIterator(): Generator
+    {
+        foreach (array_values($this->data) as $k => $v) {
+            yield $k => $v;
+        }
     }
 }
 

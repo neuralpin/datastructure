@@ -5,10 +5,13 @@ declare(strict_types=1);
 namespace Neuralpin\DataStructure;
 
 use Generator;
+use JsonSerializable;
+use IteratorAggregate;
+
 
 require __DIR__.'/ListNode.php';
 
-class LinkedList
+class LinkedList implements IteratorAggregate, JsonSerializable
 {
     protected ?ListNode $top = null;
 
@@ -85,37 +88,6 @@ class LinkedList
         return $this->bottom;
     }
 
-    public function toArray(): array
-    {
-        $data = [];
-        $current = $this->top();
-        while ($current) {
-            $data[] = $current->value;
-            $current = $current?->next;
-        }
-
-        return $data;
-    }
-
-    public function __debugInfo(): array
-    {
-        return $this->toArray();
-    }
-
-    /**
-     * Algorithm for list iterating using generators
-     */
-    public function generator(): Generator
-    {
-        $current = $this->top();
-        $key = 0;
-        while ($current) {
-            yield $key => $current->value;
-            $current = $current?->next;
-            $key++;
-        }
-    }
-
     /**
      * Return and remove the top element of the list
      */
@@ -151,6 +123,42 @@ class LinkedList
 
         return $newNode;
     }
+
+    public function toArray(): array
+    {
+        $data = [];
+        $current = $this->top();
+        while ($current) {
+            $data[] = $current->value;
+            $current = $current?->next;
+        }
+
+        return $data;
+    }
+
+    public function __debugInfo(): array
+    {
+        return $this->toArray();
+    }
+
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
+
+    /**
+     * Algorithm for list iterating using generators
+     */
+    public function getIterator(): Generator
+    {
+        $current = $this->top();
+        $key = 0;
+        while ($current) {
+            yield $key => $current->value;
+            $current = $current?->next;
+            $key++;
+        }
+    }
 }
 
 $MyList = new LinkedList;
@@ -164,9 +172,10 @@ $MyList->unshift('Index');
 
 var_dump($MyList->shift());
 
-foreach ($MyList->generator() as $k => $v) {
+foreach ($MyList as $k => $v) {
     var_dump("{$k} => {$v}");
 }
+var_dump(json_encode($MyList));
 
 // var_dump($MyList->pop());
 // var_dump($MyList->pop());

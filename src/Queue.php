@@ -4,9 +4,13 @@ declare(strict_types=1);
 
 namespace Neuralpin\DataStructure;
 
+use Generator;
+use JsonSerializable;
+use IteratorAggregate;
+
 require __DIR__.'/ListNode.php';
 
-class Queue
+class Queue implements IteratorAggregate, JsonSerializable
 {
     protected ?ListNode $front = null;
 
@@ -29,23 +33,6 @@ class Queue
     public function peek(): ?ListNode
     {
         return $this->front;
-    }
-
-    public function toArray(): array
-    {
-        $data = [];
-        $current = $this->peek();
-        while ($current) {
-            $data[] = $current->value;
-            $current = $current?->next;
-        }
-
-        return $data;
-    }
-
-    public function __debugInfo(): array
-    {
-        return $this->toArray();
     }
 
     /**
@@ -71,7 +58,7 @@ class Queue
     {
         $newNode = new ListNode($Item);
 
-        if (!isset($this->front)) {
+        if (! isset($this->front)) {
             $this->front = $newNode;
         }
 
@@ -81,6 +68,39 @@ class Queue
 
         $this->back = $newNode;
     }
+
+    public function toArray(): array
+    {
+        $data = [];
+        $current = $this->peek();
+        while ($current) {
+            $data[] = $current->value;
+            $current = $current?->next;
+        }
+
+        return $data;
+    }
+
+    public function __debugInfo(): array
+    {
+        return $this->toArray();
+    }
+
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
+
+    public function getIterator(): Generator
+    {
+        $current = $this->peek();
+        $key = 0;
+        while ($current) {
+            yield $key => $current->value;
+            $current = $current?->next;
+            $key++;
+        }
+    }
 }
 
 $MyQueue = new Queue;
@@ -89,7 +109,7 @@ $MyQueue->push(2);
 $MyQueue->push(3);
 $MyQueue->push(4);
 $MyQueue->push(5);
-var_dump($MyQueue);
+// var_dump($MyQueue);
 // var_dump($MyQueue->peek());
 
 // var_dump($MyQueue->peek());
@@ -105,3 +125,9 @@ var_dump($MyQueue);
 // $MyQueue->push(2);
 // $MyQueue->clear();
 // var_dump($MyQueue->isEmpty());
+
+
+foreach($MyQueue as $k => $v){
+    var_dump("$k => $v");
+}
+var_dump(json_encode($MyQueue));

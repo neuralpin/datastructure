@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace Neuralpin\DataStructure;
 
 use Generator;
+use JsonSerializable;
+use IteratorAggregate;
 
 require __DIR__.'/DoubleLinkedListNode.php';
 
-class DoubleLinkedList
+class DoubleLinkedList implements IteratorAggregate, JsonSerializable
 {
     protected ?DoubleLinkedListNode $top = null;
 
@@ -81,41 +83,10 @@ class DoubleLinkedList
         return $this->bottom;
     }
 
-    public function toArray(): array
-    {
-        $data = [];
-        $current = $this->top();
-        while ($current) {
-            $data[] = $current->value;
-            $current = $current?->next;
-        }
-
-        return $data;
-    }
-
-    public function __debugInfo(): array
-    {
-        return $this->toArray();
-    }
-
-    /**
-     * Algorithm for list iterating using generators
-     */
-    public function generator(): Generator
-    {
-        $current = $this->top();
-        $key = 0;
-        while ($current) {
-            yield $key => $current->value;
-            $current = $current?->next;
-            $key++;
-        }
-    }
-
     /**
      * Algorithm for list iterating using generators starting from the bottom
      */
-    public function reverseGenerator(): Generator
+    public function getReverseIterator(): Generator
     {
         $current = $this->bottom();
         $key = 0;
@@ -188,12 +159,48 @@ class DoubleLinkedList
         $node->next = null;
         $node->prev = null;
     }
+
+    public function toArray(): array
+    {
+        $data = [];
+        $current = $this->top();
+        while ($current) {
+            $data[] = $current->value;
+            $current = $current?->next;
+        }
+
+        return $data;
+    }
+
+    public function __debugInfo(): array
+    {
+        return $this->toArray();
+    }
+
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
+
+    /**
+     * Algorithm for list iterating using generators
+     */
+    public function getIterator(): Generator
+    {
+        $current = $this->top();
+        $key = 0;
+        while ($current) {
+            yield $key => $current->value;
+            $current = $current?->next;
+            $key++;
+        }
+    }
 }
 
-// $MyList = new DoubleLinkedList;
-// $MyList->push('Computer science');
-// $MyList->push('Algorithms');
-// $MyList->push('Data Structures');
+$MyList = new DoubleLinkedList;
+$MyList->push('Computer science');
+$MyList->push('Algorithms');
+$MyList->push('Data Structures');
 
 // $MyList->unshift('Index');
 
@@ -201,9 +208,11 @@ class DoubleLinkedList
 
 // var_dump($MyList->shift());
 
-// foreach ($MyList->generator() as $k => $v) {
-//     var_dump("{$k} => {$v}");
-// }
+foreach ($MyList as $k => $v) {
+    var_dump("{$k} => {$v}");
+}
+
+var_dump(json_encode($MyList));
 
 // $EmptyList = new DoubleLinkedList;
 // var_dump([
@@ -272,11 +281,11 @@ class DoubleLinkedList
 // $nodeThird->remove();
 // var_dump($RemovingTest);
 
-$RemovingFromBotomTest = new DoubleLinkedList;
-$nodeFirst = $RemovingFromBotomTest->push(1);
-$nodeSecond = $RemovingFromBotomTest->push(2);
-$nodeSecond->remove();
-var_dump($RemovingFromBotomTest);
+// $RemovingFromBotomTest = new DoubleLinkedList;
+// $nodeFirst = $RemovingFromBotomTest->push(1);
+// $nodeSecond = $RemovingFromBotomTest->push(2);
+// $nodeSecond->remove();
+// var_dump($RemovingFromBotomTest);
 
 // var_dump($MyList->pop());
 // var_dump($MyList->pop());

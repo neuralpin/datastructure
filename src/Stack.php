@@ -4,9 +4,14 @@ declare(strict_types=1);
 
 namespace Neuralpin\DataStructure;
 
-require __DIR__.'/StackNode.php';
+use Generator;
+use JsonSerializable;
+use IteratorAggregate;
+use Neuralpin\DataStructure\ListNode;
 
-class Stack
+require __DIR__.'/ListNode.php';
+
+class Stack implements IteratorAggregate, JsonSerializable
 {
     protected ?ListNode $top = null;
 
@@ -31,22 +36,6 @@ class Stack
         return $this->top;
     }
 
-    public function toArray(): array
-    {
-        $data = [];
-        $current = $this->peek();
-        while ($current) {
-            $data[] = $current->value;
-            $current = $current?->next;
-        }
-
-        return $data;
-    }
-
-    public function __debugInfo(): array
-    {
-        return $this->toArray();
-    }
 
     /**
      * Removes and returns the element at the top of the stack
@@ -81,6 +70,39 @@ class Stack
 
         $this->top = $newNode;
     }
+
+    public function toArray(): array
+    {
+        $data = [];
+        $current = $this->peek();
+        while ($current) {
+            $data[] = $current->value;
+            $current = $current?->next;
+        }
+
+        return $data;
+    }
+
+    public function __debugInfo(): array
+    {
+        return $this->toArray();
+    }
+
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
+
+    public function getIterator(): Generator
+    {
+        $current = $this->top;
+        $key = 0;
+        while ($current) {
+            yield $key => $current->value;
+            $current = $current?->next;
+            $key++;
+        }
+    }
 }
 
 $MyStack = new Stack;
@@ -92,14 +114,19 @@ $MyStack->push(5);
 // var_dump($MyStack);
 // var_dump($MyStack->peek());
 
-var_dump($MyStack->pop());
-var_dump($MyStack->pop());
-var_dump($MyStack->pop());
-var_dump($MyStack->pop());
-var_dump($MyStack->pop());
-var_dump($MyStack);
+// var_dump($MyStack->pop());
+// var_dump($MyStack->pop());
+// var_dump($MyStack->pop());
+// var_dump($MyStack->pop());
+// var_dump($MyStack->pop());
+// var_dump($MyStack);
 
-$MyStack->push(1);
-$MyStack->push(2);
-$MyStack->clear();
-var_dump($MyStack->isEmpty());
+// $MyStack->push(1);
+// $MyStack->push(2);
+// $MyStack->clear();
+// var_dump($MyStack->isEmpty());
+
+foreach($MyStack as $k => $v){
+    var_dump("{$k} => {$v}");
+}
+var_dump(json_encode($MyStack));
