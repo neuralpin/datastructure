@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Neuralpin\DataStructure;
 
 use Generator;
-use JsonSerializable;
 use IteratorAggregate;
+use JsonSerializable;
 
 require __DIR__.'/ListNode.php';
 
@@ -126,8 +126,7 @@ $MyQueue->push(5);
 // $MyQueue->clear();
 // var_dump($MyQueue->isEmpty());
 
-
-foreach($MyQueue as $k => $v){
+foreach ($MyQueue as $k => $v) {
     var_dump("$k => $v");
 }
 var_dump(json_encode($MyQueue));

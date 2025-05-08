@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace Neuralpin\DataStructure;
 
 use Generator;
-use JsonSerializable;
 use IteratorAggregate;
-use Neuralpin\DataStructure\ListNode;
+use JsonSerializable;
 
 require __DIR__.'/ListNode.php';
 
@@ -35,7 +34,6 @@ class Stack implements IteratorAggregate, JsonSerializable
     {
         return $this->top;
     }
-
 
     /**
      * Removes and returns the element at the top of the stack
@@ -126,7 +124,7 @@ $MyStack->push(5);
 // $MyStack->clear();
 // var_dump($MyStack->isEmpty());
 
-foreach($MyStack as $k => $v){
+foreach ($MyStack as $k => $v) {
     var_dump("{$k} => {$v}");
 }
 var_dump(json_encode($MyStack));

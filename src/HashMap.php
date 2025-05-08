@@ -6,8 +6,8 @@ namespace Neuralpin\DataStructure;
 
 use Countable;
 use Generator;
-use JsonSerializable;
 use IteratorAggregate;
+use JsonSerializable;
 
 class HashMap implements Countable, IteratorAggregate, JsonSerializable
 {

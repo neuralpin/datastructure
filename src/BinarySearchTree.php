@@ -4,27 +4,33 @@ declare(strict_types=1);
 
 namespace Neuralpin\DataStructure;
 
-
-class Node {
+class Node
+{
     public $value;
+
     public $left;
+
     public $right;
 
-    public function __construct($value) {
+    public function __construct($value)
+    {
         $this->value = $value;
         $this->left = null;
         $this->right = null;
     }
 }
 
-class BinarySearchTree {
+class BinarySearchTree
+{
     public $root;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->root = null;
     }
 
-    public function insert($value) {
+    public function insert($value)
+    {
         if ($this->root === null) {
             $this->root = new Node($value);
         } else {
@@ -32,7 +38,8 @@ class BinarySearchTree {
         }
     }
 
-    private function insertNode($node, $value) {
+    private function insertNode($node, $value)
+    {
         if ($value < $node->value) {
             if ($node->left === null) {
                 $node->left = new Node($value);
@@ -48,11 +55,13 @@ class BinarySearchTree {
         }
     }
 
-    public function search($value) {
+    public function search($value)
+    {
         return $this->searchNode($this->root, $value);
     }
 
-    private function searchNode($node, $value) {
+    private function searchNode($node, $value)
+    {
         if ($node === null || $node->value === $value) {
             return $node;
         }
@@ -63,48 +72,51 @@ class BinarySearchTree {
         }
     }
 
-    public function inorderTraversal($node) {
+    public function inorderTraversal($node)
+    {
         if ($node !== null) {
             $this->inorderTraversal($node->left);
-            echo $node->value . " ";
+            echo $node->value.' ';
             $this->inorderTraversal($node->right);
         }
     }
 
-    public function preorderTraversal($node) {
+    public function preorderTraversal($node)
+    {
         if ($node !== null) {
-            echo $node->value . " ";
+            echo $node->value.' ';
             $this->preorderTraversal($node->left);
             $this->preorderTraversal($node->right);
         }
     }
 
-    public function postorderTraversal($node) {
+    public function postorderTraversal($node)
+    {
         if ($node !== null) {
             $this->postorderTraversal($node->left);
             $this->postorderTraversal($node->right);
-            echo $node->value . " ";
+            echo $node->value.' ';
         }
     }
 }
 
 // Example usage
-$bst = new BinarySearchTree();
+$bst = new BinarySearchTree;
 $values = [8, 3, 1, 6, 4, 7, 10, 14, 13];
 
 foreach ($values as $value) {
     $bst->insert($value);
 }
 
-echo "Inorder Traversal: ";
+echo 'Inorder Traversal: ';
 $bst->inorderTraversal($bst->root);
 echo "\n";
 
-echo "Preorder Traversal: ";
+echo 'Preorder Traversal: ';
 $bst->preorderTraversal($bst->root);
 echo "\n";
 
-echo "Postorder Traversal: ";
+echo 'Postorder Traversal: ';
 $bst->postorderTraversal($bst->root);
 echo "\n";
 

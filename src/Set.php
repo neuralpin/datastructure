@@ -6,8 +6,8 @@ namespace Neuralpin\DataStructure;
 
 use Countable;
 use Generator;
-use JsonSerializable;
 use IteratorAggregate;
+use JsonSerializable;
 
 class Set implements Countable, IteratorAggregate, JsonSerializable
 {
@@ -108,7 +108,7 @@ class Set implements Countable, IteratorAggregate, JsonSerializable
      */
     public function getIterator(): Generator
     {
-        foreach(array_values($this->data) as $k => $v){
+        foreach (array_values($this->data) as $k => $v) {
             yield $k => $v;
         }
     }

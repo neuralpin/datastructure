@@ -1,28 +1,25 @@
 <?php
 
+declare(strict_types=1);
+
 class MaxHeap
 {
-    public $heap = [];
+    protected array $heap = [];
 
     /**
      * Gets the parent index of a given index.
-     *
-     * @param int $index
-     * @return int|null
      */
     protected function parent(int $index): ?int
     {
         if ($index <= 0) {
             return null;
         }
-        return floor(($index - 1) / 2);
+
+        return (int) floor(($index - 1) / 2);
     }
 
     /**
      * Gets the left child index of a given index.
-     *
-     * @param int $index
-     * @return int
      */
     protected function leftChild(int $index): int
     {
@@ -31,9 +28,6 @@ class MaxHeap
 
     /**
      * Gets the right child index of a given index.
-     *
-     * @param int $index
-     * @return int
      */
     protected function rightChild(int $index): int
     {
@@ -42,10 +36,6 @@ class MaxHeap
 
     /**
      * Swaps two elements in the heap.
-     *
-     * @param int $i
-     * @param int $j
-     * @return void
      */
     protected function swap(int $i, int $j): void
     {
@@ -54,9 +44,6 @@ class MaxHeap
 
     /**
      * Heapifies the heap starting from a given index, ensuring the max-heap property.
-     *
-     * @param int $index
-     * @return void
      */
     protected function heapifyUp(int $index): void
     {
@@ -70,9 +57,6 @@ class MaxHeap
 
     /**
      * Heapifies the heap starting from a given index, ensuring the max-heap property downwards.
-     *
-     * @param int $index
-     * @return void
      */
     protected function heapifyDown(int $index): void
     {
@@ -98,8 +82,7 @@ class MaxHeap
     /**
      * Inserts a new value into the max-heap.
      *
-     * @param mixed $value
-     * @return void
+     * @param  mixed  $value
      */
     public function insert($value): void
     {
@@ -142,8 +125,6 @@ class MaxHeap
 
     /**
      * Checks if the max-heap is empty.
-     *
-     * @return bool
      */
     public function isEmpty(): bool
     {
@@ -152,8 +133,6 @@ class MaxHeap
 
     /**
      * Gets the number of elements in the max-heap.
-     *
-     * @return int
      */
     public function size(): int
     {
@@ -162,8 +141,6 @@ class MaxHeap
 
     /**
      * Returns the entire heap array (for debugging or inspection).
-     *
-     * @return array
      */
     public function getHeap(): array
     {
@@ -172,26 +149,26 @@ class MaxHeap
 }
 
 // Example usage:
-$maxHeap = new MaxHeap();
-$maxHeap->insert(10);
-$maxHeap->insert(5);
-$maxHeap->insert(15);
-$maxHeap->insert(3);
-$maxHeap->insert(20);
+$MaxHeap = new MaxHeap;
+$MaxHeap->insert(10);
+$MaxHeap->insert(5);
+$MaxHeap->insert(15);
+$MaxHeap->insert(3);
+$MaxHeap->insert(20);
 
-echo "Max Heap: " . implode(", ", $maxHeap->getHeap()) . "\n"; // Output: Max Heap: 20, 15, 10, 3, 5
+echo 'Max Heap: '.implode(', ', $MaxHeap->getHeap())."\n"; // Output: Max Heap: 20, 15, 10, 3, 5
 
-echo "Extract Max: " . $maxHeap->extractMax() . "\n"; // Output: Extract Max: 20
-echo "Max Heap after extraction: " . implode(", ", $maxHeap->getHeap()) . "\n"; // Output: Max Heap after extraction: 15, 10, 5, 3
+echo 'Extract Max: '.$MaxHeap->extractMax()."\n"; // Output: Extract Max: 20
+echo 'Max Heap after extraction: '.implode(', ', $MaxHeap->getHeap())."\n"; // Output: Max Heap after extraction: 15, 10, 5, 3
 
-echo "Peek Max: " . $maxHeap->peekMax() . "\n"; // Output: Peek Max: 15
-echo "Size: " . $maxHeap->size() . "\n"; // Output: Size: 4
+echo 'Peek Max: '.$MaxHeap->peekMax()."\n"; // Output: Peek Max: 15
+echo 'Size: '.$MaxHeap->size()."\n"; // Output: Size: 4
 
-$maxHeap->insert(25);
-echo "Max Heap after insertion: " . implode(", ", $maxHeap->getHeap()) . "\n"; // Output: Max Heap after insertion: 25, 15, 10, 3, 5
+$MaxHeap->insert(25);
+echo 'Max Heap after insertion: '.implode(', ', $MaxHeap->getHeap())."\n"; // Output: Max Heap after insertion: 25, 15, 10, 3, 5
 
-while (!$maxHeap->isEmpty()) {
-    echo "Extracting: " . $maxHeap->extractMax() . "\n";
+while (! $MaxHeap->isEmpty()) {
+    echo 'Extracting: '.$MaxHeap->extractMax()."\n";
 }
 // Output:
 // Extracting: 25
@@ -200,4 +177,4 @@ while (!$maxHeap->isEmpty()) {
 // Extracting: 5
 // Extracting: 3
 
-echo "Is Empty: " . ($maxHeap->isEmpty() ? 'Yes' : 'No') . "\n"; // Output: Is Empty: Yes
+echo 'Is Empty: '.($MaxHeap->isEmpty() ? 'Yes' : 'No')."\n"; // Output: Is Empty: Yes

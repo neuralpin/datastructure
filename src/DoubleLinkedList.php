@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Neuralpin\DataStructure;
 
 use Generator;
-use JsonSerializable;
 use IteratorAggregate;
+use JsonSerializable;
 
 require __DIR__.'/DoubleLinkedListNode.php';
 

@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Neuralpin\DataStructure;
 
+use ArrayAccess;
 use Countable;
 use Exception;
 use Generator;
-use ArrayAccess;
-use JsonSerializable;
 use IteratorAggregate;
+use JsonSerializable;
 use OutOfRangeException;
 
 class FixedArray implements ArrayAccess, Countable, IteratorAggregate, JsonSerializable
@@ -104,7 +104,7 @@ class FixedArray implements ArrayAccess, Countable, IteratorAggregate, JsonSeria
      */
     public function getIterator(): Generator
     {
-        foreach($this->data as $k => $v){
+        foreach ($this->data as $k => $v) {
             yield $k => $v;
         }
     }
@@ -138,7 +138,7 @@ $MyTest[1] = 'Tierra';
 
 // echo $MyTest[0];
 
-foreach($MyTest as $k => $v){
+foreach ($MyTest as $k => $v) {
     var_dump("$k => $v");
 }
 var_dump(json_encode($MyTest));
