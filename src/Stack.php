@@ -8,9 +8,9 @@ require __DIR__.'/StackNode.php';
 
 class Stack
 {
-    protected ?StackNode $top = null;
+    protected ?ListNode $top = null;
 
-    protected ?StackNode $bottom = null;
+    protected ?ListNode $bottom = null;
 
     /**
      * Remove all elements from the list
@@ -26,7 +26,7 @@ class Stack
         return is_null($this->top);
     }
 
-    public function peek(): ?StackNode
+    public function peek(): ?ListNode
     {
         return $this->top;
     }
@@ -69,7 +69,7 @@ class Stack
      */
     public function push(mixed $Item)
     {
-        $newNode = new StackNode($Item);
+        $newNode = new ListNode($Item);
 
         if (! isset($this->bottom)) {
             $this->bottom = $newNode;

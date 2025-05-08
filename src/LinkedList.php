@@ -6,20 +6,20 @@ namespace Neuralpin\DataStructure;
 
 use Generator;
 
-require __DIR__.'/LinkedListNode.php';
+require __DIR__.'/ListNode.php';
 
 class LinkedList
 {
-    protected ?LinkedListNode $top = null;
+    protected ?ListNode $top = null;
 
-    protected ?LinkedListNode $bottom = null;
+    protected ?ListNode $bottom = null;
 
     /**
      * Add a new element to the bottom of the list
      */
-    public function push(mixed $Item): LinkedListNode
+    public function push(mixed $Item): ListNode
     {
-        $newNode = new LinkedListNode($Item, $this);
+        $newNode = new ListNode($Item);
 
         if (! isset($this->top)) {
             $this->top = $newNode;
@@ -75,12 +75,12 @@ class LinkedList
         return is_null($this->top);
     }
 
-    public function top(): ?LinkedListNode
+    public function top(): ?ListNode
     {
         return $this->top;
     }
 
-    public function bottom(): ?LinkedListNode
+    public function bottom(): ?ListNode
     {
         return $this->bottom;
     }
@@ -135,9 +135,9 @@ class LinkedList
     /**
      * Insert an element at the top of the list
      */
-    public function unshift(mixed $Item): LinkedListNode
+    public function unshift(mixed $Item): ListNode
     {
-        $newNode = new LinkedListNode($Item, $this);
+        $newNode = new ListNode($Item);
 
         if (! isset($this->bottom)) {
             $this->bottom = $newNode;
@@ -198,7 +198,7 @@ foreach ($MyList->generator() as $k => $v) {
 // $BreadcrumbMap = [];
 // $List = null;
 // foreach($BreadcrumbList as $Item){
-//     $BreadcrumbMap[$Item->id] = new LinkedListNode($Item);
+//     $BreadcrumbMap[$Item->id] = new ListNode($Item);
 
 //     if($Item->parent === 0){
 //         $List = $BreadcrumbMap[$Item->id];

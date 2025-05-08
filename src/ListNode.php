@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Neuralpin\DataStructure;
 
-class LinkedListNode
+class ListNode
 {
     public mixed $value = null {
         get => $this->value;
@@ -17,10 +17,15 @@ class LinkedListNode
     }
 
     public function __construct(
-        mixed $value,
-        protected LinkedList $List,
+        mixed $value
     ) {
         $this->value = $value;
-        $this->List = $List;
+    }
+
+    public function __debugInfo(): array
+    {
+        return [
+            'value' => $this->value,
+        ];
     }
 }
