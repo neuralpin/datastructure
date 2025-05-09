@@ -11,6 +11,7 @@ use JsonSerializable;
 
 class Set implements Countable, IteratorAggregate, JsonSerializable
 {
+    /** * @var array<string|int|float|object> */
     protected array $data;
 
     /** @param array<string|int|float|object> $elements */
@@ -23,7 +24,7 @@ class Set implements Countable, IteratorAggregate, JsonSerializable
 
     protected function hash(string|int|float|object $element): string
     {
-        if (gettype($element) == 'object') {
+        if (gettype($element) === 'object') {
             return md5((string) spl_object_id($element));
         }
 
@@ -58,11 +59,6 @@ class Set implements Countable, IteratorAggregate, JsonSerializable
         $this->data = [];
     }
 
-    public function toArray(): array
-    {
-        return array_values($this->data);
-    }
-
     public function count(): int
     {
         return count($this->data);
@@ -92,17 +88,7 @@ class Set implements Countable, IteratorAggregate, JsonSerializable
     {
         return array_reduce(array_values($this->data), $callback);
     }
-
-    public function __debugInfo(): array
-    {
-        return $this->toArray();
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
-    }
-
+    
     /**
      * Algorithm for list iterating using generators
      */
@@ -111,6 +97,21 @@ class Set implements Countable, IteratorAggregate, JsonSerializable
         foreach (array_values($this->data) as $k => $v) {
             yield $k => $v;
         }
+    }
+
+    public function toArray(): array
+    {
+        return array_values($this->data);
+    }
+
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
+
+    public function __debugInfo(): array
+    {
+        return $this->toArray();
     }
 }
 

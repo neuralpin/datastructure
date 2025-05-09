@@ -142,7 +142,11 @@ class MaxHeap
 
     function __clone(): void
     {
-        $this->root = clone $this->root;
-        $this->lastInserted = clone $this->lastInserted;
+        if(isset($this->root)){
+            $this->root = clone $this->root;
+        }
+        if(isset($this->lastInserted)){
+            $this->lastInserted = clone $this->lastInserted;
+        }
     }
 }
