@@ -102,7 +102,7 @@ class BinarySearchTree
 
 // Example usage
 $bst = new BinarySearchTree;
-$values = [8, 3, 1, 6, 4, 7, 10, 14, 13];
+$values = [44, 8, 3, 1, 6, 4, 7, 10, 14, 13];
 
 foreach ($values as $value) {
     $bst->insert($value);

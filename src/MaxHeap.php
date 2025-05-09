@@ -2,179 +2,118 @@
 
 declare(strict_types=1);
 
-class MaxHeap
-{
-    protected array $heap = [];
+class MaxHeapTree {
+    private $root;
+    private $nodes = [];
 
-    /**
-     * Gets the parent index of a given index.
-     */
-    protected function parent(int $index): ?int
-    {
-        if ($index <= 0) {
-            return null;
+    public function __construct() {
+        $this->root = null;
+    }
+
+    public function insert($value) {
+        $newNode = new class($value){
+            public $value;
+            public $left;
+            public $right;
+            public $parent;
+
+            public function __construct($value) {
+                $this->value = $value;
+                $this->left = null;
+                $this->right = null;
+                $this->parent = null;
+            }
+        };
+
+        if ($this->root === null) {
+            $this->root = $newNode;
+            $this->nodes[] = $newNode;
+            return;
         }
 
-        return (int) floor(($index - 1) / 2);
+        $parentIndex = floor((count($this->nodes) - 1) / 2);
+        $parent = $this->nodes[$parentIndex];
+
+        $newNode->parent = $parent;
+        if ($parent->left === null) {
+            $parent->left = $newNode;
+        } else {
+            $parent->right = $newNode;
+        }
+
+        $this->nodes[] = $newNode;
+        $this->heapifyUp($newNode);
     }
 
-    /**
-     * Gets the left child index of a given index.
-     */
-    protected function leftChild(int $index): int
-    {
-        return 2 * $index + 1;
-    }
-
-    /**
-     * Gets the right child index of a given index.
-     */
-    protected function rightChild(int $index): int
-    {
-        return 2 * $index + 2;
-    }
-
-    /**
-     * Swaps two elements in the heap.
-     */
-    protected function swap(int $i, int $j): void
-    {
-        [$this->heap[$i], $this->heap[$j]] = [$this->heap[$j], $this->heap[$i]];
-    }
-
-    /**
-     * Heapifies the heap starting from a given index, ensuring the max-heap property.
-     */
-    protected function heapifyUp(int $index): void
-    {
-        $parent = $this->parent($index);
-        while ($index > 0 && $this->heap[$index] > $this->heap[$parent]) {
-            $this->swap($index, $parent);
-            $index = $parent;
-            $parent = $this->parent($index);
+    private function heapifyUp($node) {
+        while ($node->parent !== null && $node->value > $node->parent->value) {
+            $this->swapValues($node, $node->parent);
+            $node = $node->parent;
         }
     }
 
-    /**
-     * Heapifies the heap starting from a given index, ensuring the max-heap property downwards.
-     */
-    protected function heapifyDown(int $index): void
-    {
-        $left = $this->leftChild($index);
-        $right = $this->rightChild($index);
-        $largest = $index;
-        $count = count($this->heap);
-
-        if ($left < $count && $this->heap[$left] > $this->heap[$largest]) {
-            $largest = $left;
-        }
-
-        if ($right < $count && $this->heap[$right] > $this->heap[$largest]) {
-            $largest = $right;
-        }
-
-        if ($largest !== $index) {
-            $this->swap($index, $largest);
-            $this->heapifyDown($largest);
-        }
+    private function swapValues($node1, $node2) {
+        $temp = $node1->value;
+        $node1->value = $node2->value;
+        $node2->value = $temp;
     }
 
-    /**
-     * Inserts a new value into the max-heap.
-     *
-     * @param  mixed  $value
-     */
-    public function insert($value): void
-    {
-        $this->heap[] = $value;
-        $this->heapifyUp(count($this->heap) - 1);
-    }
-
-    /**
-     * Extracts the maximum value from the max-heap.
-     *
-     * @return mixed|null
-     */
     public function extractMax()
     {
-        if (empty($this->heap)) {
+        if ($this->root === null) {
             return null;
         }
-
-        if (count($this->heap) === 1) {
-            return array_pop($this->heap);
+        if (count($this->nodes) === 1) {
+            $maxValue = $this->root->value;
+            $this->root = null;
+            array_pop($this->nodes);
+            return $maxValue;
         }
 
-        $max = $this->heap[0];
-        $lastElement = array_pop($this->heap);
-        $this->heap[0] = $lastElement;
-        $this->heapifyDown(0);
+        $maxValue = $this->root->value;
+        $lastNode = array_pop($this->nodes);
+        $this->root->value = $lastNode->value;
 
-        return $max;
+        if ($lastNode->parent !== null) {
+            if ($lastNode->parent->right === $lastNode) {
+                $lastNode->parent->right = null;
+            } else {
+                $lastNode->parent->left = null;
+            }
+        }
+
+        $this->heapifyDown($this->root);
+        return $maxValue;
     }
 
-    /**
-     * Gets the maximum value in the max-heap without removing it.
-     *
-     * @return mixed|null
-     */
-    public function peekMax()
+    private function heapifyDown($node)
     {
-        return $this->heap[0] ?? null;
+        while ($node !== null) {
+            $largest = $node;
+            if ($node->left !== null && $node->left->value > $largest->value) {
+                $largest = $node->left;
+            }
+            if ($node->right !== null && $node->right->value > $largest->value) {
+                $largest = $node->right;
+            }
+
+            if ($largest === $node) {
+                break;
+            }
+
+            $this->swapValues($node, $largest);
+            $node = $largest;
+        }
     }
 
-    /**
-     * Checks if the max-heap is empty.
-     */
-    public function isEmpty(): bool
-    {
-        return empty($this->heap);
-    }
-
-    /**
-     * Gets the number of elements in the max-heap.
-     */
-    public function size(): int
-    {
-        return count($this->heap);
-    }
-
-    /**
-     * Returns the entire heap array (for debugging or inspection).
-     */
-    public function getHeap(): array
-    {
-        return $this->heap;
-    }
 }
 
-// Example usage:
-$MaxHeap = new MaxHeap;
-$MaxHeap->insert(10);
-$MaxHeap->insert(5);
-$MaxHeap->insert(15);
-$MaxHeap->insert(3);
-$MaxHeap->insert(20);
-
-echo 'Max Heap: '.implode(', ', $MaxHeap->getHeap())."\n"; // Output: Max Heap: 20, 15, 10, 3, 5
-
-echo 'Extract Max: '.$MaxHeap->extractMax()."\n"; // Output: Extract Max: 20
-echo 'Max Heap after extraction: '.implode(', ', $MaxHeap->getHeap())."\n"; // Output: Max Heap after extraction: 15, 10, 5, 3
-
-echo 'Peek Max: '.$MaxHeap->peekMax()."\n"; // Output: Peek Max: 15
-echo 'Size: '.$MaxHeap->size()."\n"; // Output: Size: 4
-
-$MaxHeap->insert(25);
-echo 'Max Heap after insertion: '.implode(', ', $MaxHeap->getHeap())."\n"; // Output: Max Heap after insertion: 25, 15, 10, 3, 5
-
-while (! $MaxHeap->isEmpty()) {
-    echo 'Extracting: '.$MaxHeap->extractMax()."\n";
+$Heap = new MaxHeapTree;
+$values = [99,10,28,49,36,22,22,25,44,63];
+foreach($values as $v){
+    $Heap->insert($v);
 }
-// Output:
-// Extracting: 25
-// Extracting: 15
-// Extracting: 10
-// Extracting: 5
-// Extracting: 3
-
-echo 'Is Empty: '.($MaxHeap->isEmpty() ? 'Yes' : 'No')."\n"; // Output: Is Empty: Yes
+var_dump(json_encode($values));
+foreach ($values as $v) {
+    var_dump($Heap->extractMax());
+}
