@@ -281,11 +281,11 @@ var_dump(json_encode($MyList));
 // $nodeThird->remove();
 // var_dump($RemovingTest);
 
-// $RemovingFromBotomTest = new DoubleLinkedList;
-// $nodeFirst = $RemovingFromBotomTest->push(1);
-// $nodeSecond = $RemovingFromBotomTest->push(2);
+// $RemovingFromBottomTest = new DoubleLinkedList;
+// $nodeFirst = $RemovingFromBottomTest->push(1);
+// $nodeSecond = $RemovingFromBottomTest->push(2);
 // $nodeSecond->remove();
-// var_dump($RemovingFromBotomTest);
+// var_dump($RemovingFromBottomTest);
 
 // var_dump($MyList->pop());
 // var_dump($MyList->pop());
