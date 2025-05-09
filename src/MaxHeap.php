@@ -139,4 +139,10 @@ class MaxHeap
     {
         return $this->root?->value;
     }
+
+    function __clone(): void
+    {
+        $this->root = clone $this->root;
+        $this->lastInserted = clone $this->lastInserted;
+    }
 }

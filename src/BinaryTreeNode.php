@@ -25,4 +25,17 @@ class BinaryTreeNode
     {
         return $this->value->key;
     }
+
+    public function __clone()
+    {
+        $this->value = clone $this->value;
+
+        if(isset($this->left)){
+            $this->left = clone $this->left;
+        }
+
+        if(isset($this->right)){
+            $this->right = clone $this->right;
+        }
+    }
 }

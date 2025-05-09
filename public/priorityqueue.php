@@ -11,17 +11,22 @@ $Queue->push('Discount inventory', 10);
 $Queue->push('Generate order', 100);
 $Queue->push('Generate dayly report', 1);
 
+while(! $Queue->isEmpty()){
+    var_dump($Queue->pop());
+}
 // foreach($Queue as $k => $Task){
 //     var_dump($Task);
 // }
 
 // var_dump($Queue);
+// var_dump(...$Queue);
+// var_dump([...$Queue]);
 
-var_dump(count($Queue));
-var_dump($Queue->peek());
-var_dump([...$Queue]);
-var_dump(count($Queue));
-var_dump($Queue->isEmpty());
+// var_dump($Queue->peek());
+// var_dump($Queue);
+// var_dump([...$Queue]);
+// var_dump(...$Queue);
+// var_dump(json_encode($Queue));
 
 
 // $Queue = new PriorityQueue();

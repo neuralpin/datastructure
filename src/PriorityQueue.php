@@ -6,10 +6,11 @@ namespace Neuralpin\DataStructure;
 
 use Countable;
 use Generator;
+use JsonSerializable;
 use IteratorAggregate;
 use Neuralpin\DataStructure\MaxHeap;
 
-class PriorityQueue implements Countable, IteratorAggregate
+class PriorityQueue implements Countable, IteratorAggregate, JsonSerializable
 {
     protected MaxHeap $MaxHeap;
 
@@ -72,7 +73,22 @@ class PriorityQueue implements Countable, IteratorAggregate
 
     public function toArray(): array
     {
-        return [...(clone $this)];
+        return [...$this];
+    }
+
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
+
+    public function __debugInfo(): array
+    {
+        return $this->toArray();
+    }
+
+    function __clone(): void
+    {
+        $this->MaxHeap = clone $this->MaxHeap;
     }
 
 }
