@@ -15,13 +15,11 @@ class FixedArray implements ArrayAccess, Countable, IteratorAggregate, JsonSeria
 {
     protected ?array $data = [];
 
-    protected int $count = 0;
-
     public function __construct(protected int $size) {}
 
     public function count(): int
     {
-        return $this->count;
+        return count($this->data);
     }
 
     public function capacity(): int
@@ -31,12 +29,11 @@ class FixedArray implements ArrayAccess, Countable, IteratorAggregate, JsonSeria
 
     public function push(mixed $element): void
     {
-        if ($this->count === $this->size) {
+        if ($this->count() === $this->size) {
             throw new OutOfRangeException('Out of range');
         }
 
         $this->data[] = $element;
-        $this->count++;
     }
 
     public function pop(): mixed
@@ -46,7 +43,6 @@ class FixedArray implements ArrayAccess, Countable, IteratorAggregate, JsonSeria
         if (isset($this->data[$lastKey])) {
             $element = $this->data[$lastKey];
             unset($this->data[$lastKey]);
-            $this->count--;
 
             return $element;
         }
@@ -57,7 +53,6 @@ class FixedArray implements ArrayAccess, Countable, IteratorAggregate, JsonSeria
     public function clear()
     {
         $this->data = [];
-        $this->count = 0;
     }
 
     public function offsetExists(mixed $offset): bool
@@ -72,19 +67,17 @@ class FixedArray implements ArrayAccess, Countable, IteratorAggregate, JsonSeria
 
     public function offsetSet(mixed $offset, mixed $value): void
     {
-        if (! isset($this->data[$offset]) && $this->count === $this->size) {
+        if (! isset($this->data[$offset]) && $this->count() === $this->size) {
             throw new OutOfRangeException('Out of range');
         }
 
         $this->data[$offset] = $value;
-        $this->count++;
     }
 
     public function offsetUnset(mixed $offset): void
     {
         if (isset($this->data[$offset])) {
             unset($this->data[$offset]);
-            $this->count--;
         }
     }
 

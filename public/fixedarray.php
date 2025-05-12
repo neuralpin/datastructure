@@ -10,7 +10,12 @@ $MyTest->push('Venus');
 $MyTest[1] = 'Tierra';
 
 try {
-    $MyTest->push(3);
+    $MyTest->push('Lorem ipsum');
+} catch (Exception $error) {
+    var_dump($error->getMessage());
+}
+try {
+    $MyTest['a'] = 'Lorem ipsum';
 } catch (Exception $error) {
     var_dump($error->getMessage());
 }
