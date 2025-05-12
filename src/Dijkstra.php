@@ -2,26 +2,49 @@
 
 declare(strict_types=1);
 
+namespace Neuralpin\DataStructure;
+
+use Neuralpin\DataStructure\Stack;
+use Neuralpin\DataStructure\MaxHeap;
+
 class Dijkstra
 {
-    protected $graph;
+    /**
+     * The graph represented as an adjacency list.
+     * Keys are vertex names, and values are arrays of adjacent vertices with their costs.
+     *
+     * @var array<string, array<string, int>>
+     */
+    protected array $graph;
 
+    /**
+     * Constructor.
+     *
+     * @param  array<string, array<string, int>>  $graph  The graph data.
+     */
     public function __construct(array $graph)
     {
         $this->graph = $graph;
     }
 
-    public function findShortestPath(string $source, string $target): object
+    /**
+     * Finds the shortest path between a source and a target vertex.
+     *
+     * @param  string  $source  The starting vertex.
+     * @param  string  $target  The destination vertex.
+     * @return array{path: array<string>, distance: int}|null An array containing the shortest path and its distance, or null if no path exists.
+     */
+    public function shortestPath(string $source, string $target): ?array
     {
         $distances = $this->initializeDistances();
         $predecessors = $this->initializePredecessors();
-        $priorityQueue = new SplPriorityQueue;
+        $priorityQueue = $this->initializePriorityQueue($distances);
 
         $distances[$source] = 0;
-        $priorityQueue->insert($source, 0);
+        $priorityQueue->push( 0, $source);
 
         while (! $priorityQueue->isEmpty()) {
-            $currentVertex = $priorityQueue->extract();
+            $currentVertex = $priorityQueue->pop()?->value;
 
             if (! isset($this->graph[$currentVertex])) {
                 continue;
@@ -33,76 +56,91 @@ class Dijkstra
                 if ($alternativeDistance < $distances[$neighbor]) {
                     $distances[$neighbor] = $alternativeDistance;
                     $predecessors[$neighbor] = $currentVertex;
-                    $priorityQueue->insert($neighbor, $alternativeDistance);
+                    $priorityQueue->push( $alternativeDistance, $neighbor);
                 }
             }
         }
 
-        return $this->buildPath($source, $target, $distances, $predecessors);
+        return $this->reconstructPath($predecessors, $target, $distances);
     }
 
+    /**
+     * Initializes the distance array for all vertices.
+     *
+     * @return array<string, int> An array where keys are vertex names and values are initialized to INF.
+     */
     protected function initializeDistances(): array
     {
         $distances = [];
         foreach (array_keys($this->graph) as $vertex) {
-            $distances[$vertex] = INF; // Set initial distance to "infinity"
+            $distances[$vertex] = INF;
         }
 
         return $distances;
     }
 
+    /**
+     * Initializes the predecessors array for all vertices.
+     *
+     * @return array<string, string|null> An array where keys are vertex names and values are initialized to null.
+     */
     protected function initializePredecessors(): array
     {
-        return array_fill_keys(array_keys($this->graph), null);
+        $predecessors = [];
+        foreach (array_keys($this->graph) as $vertex) {
+            $predecessors[$vertex] = null;
+        }
+
+        return $predecessors;
     }
 
-    protected function buildPath(string $source, string $target, array $distances, array $predecessors): object
+    /**
+     * Initializes the priority queue with all vertices and their initial distances.
+     *
+     * @param  array<string, int>  $distances  The array of initial distances.
+     * @return MaxHeap The initialized priority queue.
+     */
+    protected function initializePriorityQueue(array $distances): MaxHeap
     {
-        $pathStack = new SplStack;
+        $priorityQueue = new MaxHeap;
+        foreach ($distances as $vertex => $distance) {
+            if ($distance !== INF) {
+                $priorityQueue->push($distance, $vertex);
+            }
+        }
+
+        return $priorityQueue;
+    }
+
+    /**
+     * Reconstructs the shortest path from the predecessors array.
+     *
+     * @param  array<string, string|null>  $predecessors  An array mapping each vertex to its predecessor in the shortest path.
+     * @param  string  $target  The target vertex.
+     * @param  array<string, int>  $distances  The array of shortest distances found.
+     * @return array{path: array<string>, distance: int}|null An array containing the shortest path and its distance, or null if no path exists to the target.
+     */
+    protected function reconstructPath(array $predecessors, string $target, array $distances): ?array
+    {
+        $shortestPath = new Stack;
         $currentVertex = $target;
-        $totalDistance = 0;
+        $distance = $distances[$target] ?? INF;
 
         while (isset($predecessors[$currentVertex]) && $predecessors[$currentVertex] !== null) {
-            $pathStack->push($currentVertex);
-            $totalDistance += $this->graph[$currentVertex][$predecessors[$currentVertex]];
+            $shortestPath->push($currentVertex);
             $currentVertex = $predecessors[$currentVertex];
         }
 
-        if ($pathStack->isEmpty() && $currentVertex !== $source) {
-            return (object) ['error' => "No route from $source to $target"];
-        } else {
-            $pathStack->push($source);
-
-            return (object) [
-                'distance' => $totalDistance,
-                // 'path' => implode('->', iterator_to_array($pathStack)),
-                'path' => $pathStack,
-            ];
+        if ($shortestPath->isEmpty() && $currentVertex !== $target) {
+            return null; // No path found
         }
+
+        $shortestPath->push($currentVertex);
+        $pathArray = iterator_to_array($shortestPath);
+
+        return [
+            'path' => $pathArray,
+            'distance' => ($distance === INF) ? 0 : $distance,
+        ];
     }
 }
-
-$graph = [
-    'A' => ['B' => 3, 'D' => 3, 'F' => 6],
-    'B' => ['A' => 3, 'D' => 1, 'E' => 3],
-    'C' => ['E' => 2, 'F' => 3],
-    'D' => ['A' => 3, 'B' => 1, 'E' => 1, 'F' => 2],
-    'E' => ['B' => 3, 'C' => 2, 'D' => 1, 'F' => 5],
-    'F' => ['A' => 6, 'C' => 3, 'D' => 2, 'E' => 5],
-];
-
-$Dijkstra = new Dijkstra($graph);
-
-// Example usage
-$result1 = $Dijkstra->findShortestPath('D', 'C');  // 3:D->E->C
-$result2 = $Dijkstra->findShortestPath('C', 'A');  // 6:C->E->D->A
-$result3 = $Dijkstra->findShortestPath('B', 'F');  // 3:B->D->F
-$result4 = $Dijkstra->findShortestPath('F', 'A');  // 5:F->D->A
-$result5 = $Dijkstra->findShortestPath('A', 'G');  // No route from A to G
-
-// Output results
-print_r($result1);
-print_r($result2);
-print_r($result3);
-print_r($result4);
-print_r($result5);

@@ -8,8 +8,6 @@ use Generator;
 use IteratorAggregate;
 use JsonSerializable;
 
-require __DIR__.'/ListNode.php';
-
 class Queue implements IteratorAggregate, JsonSerializable
 {
     protected ?ListNode $front = null;
@@ -102,31 +100,3 @@ class Queue implements IteratorAggregate, JsonSerializable
         }
     }
 }
-
-$MyQueue = new Queue;
-$MyQueue->push(1);
-$MyQueue->push(2);
-$MyQueue->push(3);
-$MyQueue->push(4);
-$MyQueue->push(5);
-// var_dump($MyQueue);
-// var_dump($MyQueue->peek());
-
-// var_dump($MyQueue->peek());
-// var_dump($MyQueue->pop());
-// var_dump($MyQueue->peek());
-// var_dump($MyQueue->pop());
-// var_dump($MyQueue->pop());
-// var_dump($MyQueue->pop());
-// var_dump($MyQueue->pop());
-// var_dump($MyQueue);
-
-// $MyQueue->push(1);
-// $MyQueue->push(2);
-// $MyQueue->clear();
-// var_dump($MyQueue->isEmpty());
-
-foreach ($MyQueue as $k => $v) {
-    var_dump("$k => $v");
-}
-var_dump(json_encode($MyQueue));

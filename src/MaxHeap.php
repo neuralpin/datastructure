@@ -4,149 +4,141 @@ declare(strict_types=1);
 
 namespace Neuralpin\DataStructure;
 
-use Neuralpin\DataStructure\KeyValuePair;
+use Countable;
+use Generator;
+use IteratorAggregate;
+use JsonSerializable;
 
-class MaxHeap
+class MaxHeap implements Countable, IteratorAggregate, JsonSerializable
 {
-    private ?BinaryTreeNode $root = null;
+    /** @var KeyValuePair[] */
+    protected array $heap = [];
 
-    private ?BinaryTreeNode $lastInserted = null;
-
-    public function insert(int $key, mixed $value)
+    public function push(int $key, mixed $value): void
     {
-        $newNode = new BinaryTreeNode(new KeyValuePair($key, $value));
-        if ($this->root === null) {
-            $this->root = $newNode;
-            $this->lastInserted = $newNode;
-
-            return;
-        }
-
-        $parent = $this->findInsertionPoint();
-        $newNode->parent = $parent;
-
-        if ($parent->left === null) {
-            $parent->left = $newNode;
-        } else {
-            $parent->right = $newNode;
-        }
-
-        $this->lastInserted = $newNode;
-        $this->rollUp($newNode);
+        $this->heap[] = new KeyValuePair($key, $value);
+        $this->bubbleUp(count($this->heap) - 1);
     }
 
-    private function findInsertionPoint(): BinaryTreeNode|null
+    public function pop(): ?KeyValuePair
     {
-        // BFS-like traversal to find the first available parent for insertion
-        $queue = [$this->root];
-        while (! empty($queue)) {
-            $node = array_shift($queue);
-            if ($node->left === null || $node->right === null) {
-                return $node;
-            }
-            $queue[] = $node->left;
-            $queue[] = $node->right;
-        }
-
-        return null;
-    }
-
-    private function rollUp(BinaryTreeNode $node): void
-    {
-        while ($node->parent !== null && $node->key() > $node->parent->key()) {
-            $this->swapNodes($node, $node->parent);
-            $node = $node->parent;
-        }
-    }
-
-    private function swapNodes(BinaryTreeNode $node1, BinaryTreeNode $node2): void
-    {
-        $temp = $node1->value;
-        $node1->value = $node2->value;
-        $node2->value = $temp;
-    }
-
-    public function extractMax(): KeyValuePair|null
-    {
-        if ($this->root === null) {
+        if (empty($this->heap)) {
             return null;
         }
 
-        $maxValue = $this->root->value;
-
-        if ($this->lastInserted === $this->root) {
-            $this->root = null;
-            $this->lastInserted = null;
-
-            return $maxValue;
+        if (count($this->heap) === 1) {
+            return array_pop($this->heap);
         }
 
-        $this->root->value = $this->lastInserted->value;
-        if ($this->lastInserted->parent !== null) {
-            if ($this->lastInserted->parent->right === $this->lastInserted) {
-                $this->lastInserted->parent->right = null;
-            } else {
-                $this->lastInserted->parent->left = null;
-            }
-        }
+        $max = $this->heap[0];
+        $lastElement = array_pop($this->heap);
+        $this->heap[0] = $lastElement;
+        $this->sinkDown(0);
 
-        $this->lastInserted = $this->findLastInsertedNode();
-        $this->rollDown($this->root);
-
-        return $maxValue;
+        return $max;
     }
 
-    private function findLastInsertedNode(): BinaryTreeNode|null
+    protected function parent(int $index): ?int
     {
-        // Traversal to locate the last inserted node (BFS approach)
-        $queue = [$this->root];
-        $last = null;
-        while (! empty($queue)) {
-            $node = array_shift($queue);
-            $last = $node;
-            if ($node->left) {
-                $queue[] = $node->left;
-            }
-            if ($node->right) {
-                $queue[] = $node->right;
-            }
+        if ($index <= 0) {
+            return null;
         }
 
-        return $last;
+        return (int) ($index - 1) >> 1;
     }
 
-    private function rollDown(?BinaryTreeNode $node): void
+    protected function leftChild(int $index): int
     {
-        while ($node !== null) {
-            $largest = $node;
-            if ($node->left !== null && $node->left->key() > $largest->key()) {
-                $largest = $node->left;
-            }
-            if ($node->right !== null && $node->right->key() > $largest->key()) {
-                $largest = $node->right;
-            }
+        return ($index << 1) + 1;
+    }
 
-            if ($largest === $node) {
-                break;
-            }
+    protected function rightChild(int $index): int
+    {
+        return ($index << 1) + 2;
+    }
 
-            $this->swapNodes($node, $largest);
-            $node = $largest;
+    protected function swap(int $i, int $j): void
+    {
+        [$this->heap[$i], $this->heap[$j]] = [$this->heap[$j], $this->heap[$i]];
+    }
+
+    protected function bubbleUp(int $index): void
+    {
+        $parent = $this->parent($index);
+        while ($index > 0 && $this->heap[$index]->key > $this->heap[$parent]->key) {
+            $this->swap($index, $parent);
+            $index = $parent;
+            $parent = $this->parent($index);
+        }
+    }
+
+    protected function sinkDown(int $index): void
+    {
+        $left = $this->leftChild($index);
+        $right = $this->rightChild($index);
+        $largest = $index;
+        $count = count($this->heap);
+
+        if ($left < $count && $this->heap[$left]->key > $this->heap[$largest]->key) {
+            $largest = $left;
+        }
+
+        if ($right < $count && $this->heap[$right]->key > $this->heap[$largest]->key) {
+            $largest = $right;
+        }
+
+        if ($largest !== $index) {
+            $this->swap($index, $largest);
+            $this->sinkDown($largest);
         }
     }
 
     public function peek(): ?KeyValuePair
     {
-        return $this->root?->value;
+        return $this->heap[0] ?? null;
     }
 
-    function __clone(): void
+    public function clear(): void
     {
-        if(isset($this->root)){
-            $this->root = clone $this->root;
+        $this->heap = [];
+    }
+
+    public function isEmpty(): bool
+    {
+        return empty($this->heap);
+    }
+
+    public function count(): int
+    {
+        return count($this->heap);
+    }
+
+    public function getIterator(): Generator
+    {
+        $Heap = clone $this;
+        while (! $Heap->isEmpty()) {
+            $item = $Heap->pop();
+            yield $item->key => $item->value;
         }
-        if(isset($this->lastInserted)){
-            $this->lastInserted = clone $this->lastInserted;
+    }
+
+    public function toArray(): array
+    {
+        $data = [];
+        foreach ($this as $k => $v) {
+            $data[$k] = $v;
         }
+
+        return $data;
+    }
+
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
+
+    public function __debugInfo(): array
+    {
+        return $this->toArray();
     }
 }
