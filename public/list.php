@@ -2,7 +2,7 @@
 
 use Neuralpin\DataStructure\LinkedList;
 
-require __DIR__ . '/../vendor/autoload.php';
+require __DIR__.'/../vendor/autoload.php';
 
 $MyList = new LinkedList;
 $MyList->push('Computer science');

@@ -2,7 +2,7 @@
 
 use Neuralpin\DataStructure\HashMap;
 
-require __DIR__ . '/../vendor/autoload.php';
+require __DIR__.'/../vendor/autoload.php';
 
 $test = new HashMap([
     'color_1' => 'red',

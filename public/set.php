@@ -2,8 +2,7 @@
 
 use Neuralpin\DataStructure\Set;
 
-require __DIR__ . '/../vendor/autoload.php';
-
+require __DIR__.'/../vendor/autoload.php';
 
 $test = new Set(['red', 'green', 3.1415]);
 $test->add((object) [1, 2, 3]);

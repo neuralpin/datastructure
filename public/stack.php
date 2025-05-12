@@ -2,7 +2,7 @@
 
 use Neuralpin\DataStructure\Stack;
 
-require __DIR__ . '/../vendor/autoload.php';
+require __DIR__.'/../vendor/autoload.php';
 
 $MyStack = new Stack;
 $MyStack->push(1);

@@ -2,7 +2,7 @@
 
 use Neuralpin\DataStructure\FixedArray;
 
-require __DIR__ . '/../vendor/autoload.php';
+require __DIR__.'/../vendor/autoload.php';
 
 $MyTest = new FixedArray(2);
 $MyTest->push('Mercurio');

@@ -2,7 +2,7 @@
 
 use Neuralpin\DataStructure\Dijkstra;
 
-require __DIR__ . '/../vendor/autoload.php';
+require __DIR__.'/../vendor/autoload.php';
 
 $graph = [
     'A' => ['B' => 3, 'D' => 3, 'F' => 6],

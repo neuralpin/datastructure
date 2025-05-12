@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace Neuralpin\DataStructure;
 
-use Neuralpin\DataStructure\Stack;
-use Neuralpin\DataStructure\MaxHeap;
-
 class Dijkstra
 {
     /**
@@ -41,7 +38,7 @@ class Dijkstra
         $priorityQueue = $this->initializePriorityQueue($distances);
 
         $distances[$source] = 0;
-        $priorityQueue->push( 0, $source);
+        $priorityQueue->push(0, $source);
 
         while (! $priorityQueue->isEmpty()) {
             $currentVertex = $priorityQueue->pop()?->value;
@@ -56,7 +53,7 @@ class Dijkstra
                 if ($alternativeDistance < $distances[$neighbor]) {
                     $distances[$neighbor] = $alternativeDistance;
                     $predecessors[$neighbor] = $currentVertex;
-                    $priorityQueue->push( $alternativeDistance, $neighbor);
+                    $priorityQueue->push($alternativeDistance, $neighbor);
                 }
             }
         }

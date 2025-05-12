@@ -2,7 +2,7 @@
 
 use Neuralpin\DataStructure\Queue;
 
-require __DIR__ . '/../vendor/autoload.php';
+require __DIR__.'/../vendor/autoload.php';
 
 $MyQueue = new Queue;
 $MyQueue->push(1);

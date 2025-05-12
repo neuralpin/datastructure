@@ -6,7 +6,6 @@ namespace Neuralpin\DataStructure;
 
 use ArrayAccess;
 use Countable;
-use Exception;
 use Generator;
 use IteratorAggregate;
 use JsonSerializable;
