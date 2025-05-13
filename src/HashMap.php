@@ -5,16 +5,19 @@ declare(strict_types=1);
 namespace Neuralpin\DataStructure;
 
 use Countable;
+use Exception;
 use Generator;
-use IteratorAggregate;
+use ArrayAccess;
 use JsonSerializable;
+use IteratorAggregate;
+use Throwable;
 
-class HashMap implements Countable, IteratorAggregate, JsonSerializable
+class HashMap implements ArrayAccess, Countable, IteratorAggregate, JsonSerializable
 {
     protected array $data;
 
     /** @param array<string|int|float|object, mixed> $pairs */
-    public function __construct(array $pairs)
+    public function __construct(array $pairs = [])
     {
         $this->putAll($pairs);
     }
@@ -54,10 +57,13 @@ class HashMap implements Countable, IteratorAggregate, JsonSerializable
         return false;
     }
 
-    public function get(string|int|float|object|null $key): mixed
+    public function &get(string|int|float|object|null $key): mixed
     {
+        if(isset($this->data[$this->hash($key)])){
+            return $this->data[$this->hash($key)];
+        }
 
-        return $this->data[$this->hash($key)] ?? null;
+        throw new Exception('Undefined array key');
     }
 
     public function remove(string|int|float|object|null $key): void
@@ -115,13 +121,29 @@ class HashMap implements Countable, IteratorAggregate, JsonSerializable
         return $this->toArray();
     }
 
-    /**
-     * Algorithm for list iterating using generators
-     */
-    public function getIterator(): Generator
+    public function &getIterator(): Generator
     {
-        foreach (array_values($this->data) as $k => $v) {
+        $k = 0;
+        foreach ($this->data as &$v) {
             yield $k => $v;
+            $k++;
         }
+    }
+
+    public function offsetExists(mixed $offset): bool
+    {
+        return $this->hasKey($offset);
+    }
+    public function &offsetGet(mixed $offset): mixed
+    {
+        return $this->get($offset);
+    }
+    public function offsetSet(mixed $offset, mixed $value): void
+    {
+        $this->put($offset, $value);
+    }
+    public function offsetUnset(mixed $offset): void
+    {
+        $this->remove($offset);
     }
 }
