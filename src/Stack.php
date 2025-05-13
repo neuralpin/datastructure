@@ -28,9 +28,9 @@ class Stack implements IteratorAggregate, JsonSerializable
         return is_null($this->top);
     }
 
-    public function peek(): ?ListNode
+    public function peek(): mixed
     {
-        return $this->top;
+        return $this->top?->value;
     }
 
     /**
@@ -70,7 +70,7 @@ class Stack implements IteratorAggregate, JsonSerializable
     public function toArray(): array
     {
         $data = [];
-        $current = $this->peek();
+        $current = $this->top;
         while ($current) {
             $data[] = $current->value;
             $current = $current?->next;

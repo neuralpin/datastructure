@@ -29,3 +29,24 @@ foreach ($MyStack as $k => $v) {
     var_dump("{$k} => {$v}");
 }
 var_dump(json_encode($MyStack));
+
+// Stack Sorting algorithm
+
+$Values = new Stack;
+$Values->push(34);
+$Values->push(3);
+$Values->push(31);
+$Values->push(98);
+$Values->push(92);
+$Values->push(23);
+
+$SortedStack = new Stack;
+while (! $Values->isEmpty()) {
+    $temporal = $Values->pop();
+    while (! $SortedStack->isEmpty() && $SortedStack->peek() < $temporal) {
+        $Values->push($SortedStack->pop());
+    }
+    $SortedStack->push($temporal);
+}
+
+var_dump($SortedStack);
