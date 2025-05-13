@@ -27,14 +27,12 @@ foreach ($test as $k => &$v) {
     $v = 123;
 }
 
-
-foreach($test as $k => $v){
+foreach ($test as $k => $v) {
     var_dump("{$k} => {$v}");
 }
 
 $Map1 = new HashMap;
 $Map1['a'] = new HashMap;
 $Map1['a']['b'] = 'lorem';
-
 
 var_dump($Map1);

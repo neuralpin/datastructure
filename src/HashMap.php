@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace Neuralpin\DataStructure;
 
+use ArrayAccess;
 use Countable;
 use Exception;
 use Generator;
-use ArrayAccess;
-use JsonSerializable;
 use IteratorAggregate;
-use Throwable;
+use JsonSerializable;
 
 class HashMap implements ArrayAccess, Countable, IteratorAggregate, JsonSerializable
 {
@@ -59,7 +58,7 @@ class HashMap implements ArrayAccess, Countable, IteratorAggregate, JsonSerializ
 
     public function &get(string|int|float|object|null $key): mixed
     {
-        if(isset($this->data[$this->hash($key)])){
+        if (isset($this->data[$this->hash($key)])) {
             return $this->data[$this->hash($key)];
         }
 
@@ -126,7 +125,6 @@ class HashMap implements ArrayAccess, Countable, IteratorAggregate, JsonSerializ
         $k = 0;
         foreach ($this->data as &$v) {
             yield $k => $v;
-            $k++;
         }
     }
 
@@ -134,14 +132,17 @@ class HashMap implements ArrayAccess, Countable, IteratorAggregate, JsonSerializ
     {
         return $this->hasKey($offset);
     }
+
     public function &offsetGet(mixed $offset): mixed
     {
         return $this->get($offset);
     }
+
     public function offsetSet(mixed $offset, mixed $value): void
     {
         $this->put($offset, $value);
     }
+
     public function offsetUnset(mixed $offset): void
     {
         $this->remove($offset);
