@@ -95,11 +95,11 @@ class Dijkstra
      * Initializes the priority queue with all vertices and their initial distances.
      *
      * @param  array<string, int>  $distances  The array of initial distances.
-     * @return MaxHeap The initialized priority queue.
+     * @return Heap The initialized priority queue.
      */
-    protected function initializePriorityQueue(array $distances): MaxHeap
+    protected function initializePriorityQueue(array $distances): Heap
     {
-        $priorityQueue = new MaxHeap;
+        $priorityQueue = new Heap(Heap::MODE_MAX);
         foreach ($distances as $vertex => $distance) {
             if ($distance !== INF) {
                 $priorityQueue->push($distance, $vertex);

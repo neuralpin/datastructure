@@ -1,6 +1,8 @@
 <?php
 
-use Neuralpin\DataStructure\MaxHeap;
+declare(strict_types=1);
+
+use Neuralpin\DataStructure\Heap;
 
 require __DIR__.'/../vendor/autoload.php';
 
@@ -16,7 +18,7 @@ $values = [
     ['key' => 44, 'value' => 44],
     ['key' => 63, 'value' => 63],
 ];
-$Heap = new MaxHeap;
+$Heap = new Heap;
 
 var_dump(json_encode($values));
 array_walk(
@@ -32,3 +34,12 @@ var_dump($Heap);
 //     $values,
 //     fn() => var_dump($Heap->pop()->value)
 // );
+
+$MyHeap = new Heap;
+$MyHeap->push(M_PI, M_PI);
+$MyHeap->push(0, 0);
+$MyHeap->push(-24, -24);
+$MyHeap->push(24, 24);
+$MyHeap->push(-83, -83);
+$MyHeap->push(24, 24);
+var_dump($MyHeap);
