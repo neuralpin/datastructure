@@ -14,6 +14,9 @@ class Dijkstra
      */
     protected array $graph;
 
+    protected array $distances;
+    protected array $predecessors;
+
     /**
      * Constructor.
      *
@@ -22,6 +25,9 @@ class Dijkstra
     public function __construct(array $graph)
     {
         $this->graph = $graph;
+
+        $this->distances = $this->initializeDistances();
+        $this->predecessors = $this->initializePredecessors();
     }
 
     /**
@@ -33,9 +39,9 @@ class Dijkstra
      */
     public function shortestPath(string $source, string $target): ?array
     {
-        $distances = $this->initializeDistances();
-        $predecessors = $this->initializePredecessors();
-        $priorityQueue = $this->initializePriorityQueue($distances);
+        $distances = $this->distances;
+        $predecessors = $this->predecessors;
+        $priorityQueue = new Heap(Heap::MODE_MAX);
 
         $distances[$source] = 0;
         $priorityQueue->push(0, $source);
@@ -89,24 +95,6 @@ class Dijkstra
         }
 
         return $predecessors;
-    }
-
-    /**
-     * Initializes the priority queue with all vertices and their initial distances.
-     *
-     * @param  array<string, int>  $distances  The array of initial distances.
-     * @return Heap The initialized priority queue.
-     */
-    protected function initializePriorityQueue(array $distances): Heap
-    {
-        $priorityQueue = new Heap(Heap::MODE_MAX);
-        foreach ($distances as $vertex => $distance) {
-            if ($distance !== INF) {
-                $priorityQueue->push($distance, $vertex);
-            }
-        }
-
-        return $priorityQueue;
     }
 
     /**
